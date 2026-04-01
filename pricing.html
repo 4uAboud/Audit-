@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — UX Audit Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><div class="logo-grid"><div></div><div></div><div></div><div></div></div></div>
+      <span class="logo-name">UX Audit Pro</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="audit.html" class="nav-link">Start Audit</a>
+      <a href="how.html" class="nav-link">How it works</a>
+      <a href="pricing.html" class="nav-link active">Pricing</a>
+    </div>
+    <a href="pricing.html" class="btn-nav">Buy credits</a>
+    <button class="nav-toggle" onclick="document.getElementById('nm').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="nm">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="audit.html" class="nav-link">Start Audit</a>
+    <a href="how.html" class="nav-link">How it works</a>
+    <a href="pricing.html" class="nav-link active">Pricing</a>
+  </div>
+</nav>
+
+<div class="pricing-hero">
+  <div class="container">
+    <div class="section-label" style="text-align:center;">Pricing</div>
+    <h1 class="pricing-title">Pay per audit.<br><em>No subscriptions. No surprises.</em></h1>
+    <p class="pricing-sub">Buy a credit pack and use audits whenever you need them. Credits never expire. Start with 1 free audit — no card required.</p>
+  </div>
+</div>
+
+<div class="pricing-section">
+  <div class="container">
+
+    <!-- Free trial banner -->
+    <div class="free-banner">
+      <div class="free-banner-left">
+        <div class="free-banner-badge">Free</div>
+        <div>
+          <div class="free-banner-title">Try it first — 1 free audit included</div>
+          <div class="free-banner-sub">Full access to all 4 evaluation methods. No credit card required.</div>
+        </div>
+      </div>
+      <a href="audit.html" class="btn-primary">Start free audit →</a>
+    </div>
+
+    <!-- Credit packs -->
+    <div class="packs-label">Credit packs</div>
+    <div class="packs-grid">
+
+      <div class="pack-card">
+        <div class="pack-header">
+          <div class="pack-name">Starter</div>
+          <div class="pack-price"><span class="pack-currency">$</span>9</div>
+          <div class="pack-credits">5 audits</div>
+          <div class="pack-per">$1.80 per audit</div>
+        </div>
+        <ul class="pack-features">
+          <li>All 4 evaluation methods</li>
+          <li>Heuristic evaluation (H1–H10)</li>
+          <li>Accessibility audit (WCAG)</li>
+          <li>Competitive benchmarking</li>
+          <li>HTML + Markdown export</li>
+          <li>Credits never expire</li>
+        </ul>
+        <button class="pack-btn" onclick="checkout('starter', 9)">Buy 5 audits — $9</button>
+      </div>
+
+      <div class="pack-card featured">
+        <div class="pack-popular">Most popular</div>
+        <div class="pack-header">
+          <div class="pack-name">Professional</div>
+          <div class="pack-price"><span class="pack-currency">$</span>29</div>
+          <div class="pack-credits">20 audits</div>
+          <div class="pack-per">$1.45 per audit — save 20%</div>
+        </div>
+        <ul class="pack-features">
+          <li>Everything in Starter</li>
+          <li>Priority processing</li>
+          <li>PDF report export</li>
+          <li>Audit history (30 days)</li>
+          <li>Email delivery of reports</li>
+          <li>Credits never expire</li>
+        </ul>
+        <button class="pack-btn featured-btn" onclick="checkout('professional', 29)">Buy 20 audits — $29</button>
+      </div>
+
+      <div class="pack-card">
+        <div class="pack-header">
+          <div class="pack-name">Agency</div>
+          <div class="pack-price"><span class="pack-currency">$</span>99</div>
+          <div class="pack-credits">100 audits</div>
+          <div class="pack-per">$0.99 per audit — save 45%</div>
+        </div>
+        <ul class="pack-features">
+          <li>Everything in Professional</li>
+          <li>White-label PDF reports</li>
+          <li>Custom report branding</li>
+          <li>Audit history (unlimited)</li>
+          <li>Team sharing (up to 5)</li>
+          <li>Priority email support</li>
+        </ul>
+        <button class="pack-btn" onclick="checkout('agency', 99)">Buy 100 audits — $99</button>
+      </div>
+
+    </div>
+
+    <!-- Value comparison -->
+    <div class="compare-section">
+      <div class="compare-title">How it compares to traditional UX audits</div>
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Time</th>
+              <th>Cost</th>
+              <th>Heuristics</th>
+              <th>Accessibility</th>
+              <th>Competitive</th>
+              <th>Report</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td><strong>UX Audit Pro</strong> <span class="you-badge">You</span></td>
+              <td><span class="val-good">~60 sec</span></td>
+              <td><span class="val-good">From $1.80</span></td>
+              <td><span class="val-good">✓</span></td>
+              <td><span class="val-good">✓</span></td>
+              <td><span class="val-good">✓</span></td>
+              <td><span class="val-good">✓</span></td>
+            </tr>
+            <tr>
+              <td>Freelance UX researcher</td>
+              <td><span class="val-bad">1–2 weeks</span></td>
+              <td><span class="val-bad">$800–3,000</span></td>
+              <td><span class="val-good">✓</span></td>
+              <td><span class="val-mid">Sometimes</span></td>
+              <td><span class="val-mid">Extra cost</span></td>
+              <td><span class="val-good">✓</span></td>
+            </tr>
+            <tr>
+              <td>UX agency audit</td>
+              <td><span class="val-bad">2–4 weeks</span></td>
+              <td><span class="val-bad">$3,000–15,000</span></td>
+              <td><span class="val-good">✓</span></td>
+              <td><span class="val-good">✓</span></td>
+              <td><span class="val-good">✓</span></td>
+              <td><span class="val-good">✓</span></td>
+            </tr>
+            <tr>
+              <td>DIY spreadsheet audit</td>
+              <td><span class="val-bad">3–5 days</span></td>
+              <td><span class="val-mid">Your time</span></td>
+              <td><span class="val-mid">If you know how</span></td>
+              <td><span class="val-bad">✗</span></td>
+              <td><span class="val-bad">✗</span></td>
+              <td><span class="val-bad">Manual</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="pricing-faq">
+      <div class="packs-label">Frequently asked</div>
+      <div class="pfaq-list">
+        <div class="pfaq-item">
+          <div class="pfaq-q" onclick="togglePfaq(this)">
+            <span>Do credits expire?</span><span class="pfaq-caret">▾</span>
+          </div>
+          <div class="pfaq-a">No. Credits never expire. Buy when you need them and use them at your own pace — whether that's one audit a week or ten in a single day.</div>
+        </div>
+        <div class="pfaq-item">
+          <div class="pfaq-q" onclick="togglePfaq(this)">
+            <span>What counts as one audit?</span><span class="pfaq-caret">▾</span>
+          </div>
+          <div class="pfaq-a">One audit = one full analysis run. You can upload multiple screenshots in a single run — they all count as one audit. Re-running or adjusting the configuration and running again uses another credit.</div>
+        </div>
+        <div class="pfaq-item">
+          <div class="pfaq-q" onclick="togglePfaq(this)">
+            <span>Can I share credits with my team?</span><span class="pfaq-caret">▾</span>
+          </div>
+          <div class="pfaq-a">Team sharing is available on the Agency pack — up to 5 team members can draw from a shared credit pool. Starter and Professional packs are for individual use.</div>
+        </div>
+        <div class="pfaq-item">
+          <div class="pfaq-q" onclick="togglePfaq(this)">
+            <span>What payment methods are accepted?</span><span class="pfaq-caret">▾</span>
+          </div>
+          <div class="pfaq-a">All major credit and debit cards via Stripe (Visa, Mastercard, Amex). Apple Pay and Google Pay are also supported at checkout.</div>
+        </div>
+        <div class="pfaq-item">
+          <div class="pfaq-q" onclick="togglePfaq(this)">
+            <span>Can I get a refund?</span><span class="pfaq-caret">▾</span>
+          </div>
+          <div class="pfaq-a">Yes — if you've used fewer than 3 credits from a new pack, contact us within 7 days for a full refund. We want you to be satisfied with every audit.</div>
+        </div>
+        <div class="pfaq-item">
+          <div class="pfaq-q" onclick="togglePfaq(this)">
+            <span>Do you offer custom enterprise plans?</span><span class="pfaq-caret">▾</span>
+          </div>
+          <div class="pfaq-a">Yes. For teams needing 500+ audits per month, custom branding, SSO, or API access, contact us for a custom quote. We offer volume pricing and dedicated support for enterprise customers.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Checkout modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-close" onclick="closeModal()">✕</div>
+    <div class="modal-icon">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="7" width="22" height="16" rx="3" stroke="#1A4FBD" stroke-width="1.8"/><path d="M3 12h22" stroke="#1A4FBD" stroke-width="1.8"/><path d="M8 17h5M8 20h3" stroke="#1A4FBD" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="modal-title" id="modal-title">Buy Professional pack</div>
+    <div class="modal-sub" id="modal-sub">20 audits · $29 · Credits never expire</div>
+    <div class="modal-note">
+      Payments are processed securely via <strong>Stripe</strong>. Your card details are never stored on our servers.
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Email address</label>
+      <input type="email" id="checkout-email" placeholder="you@company.com">
+    </div>
+    <button class="modal-pay-btn" id="modal-pay-btn" onclick="processCheckout()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 5H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z" stroke="currentColor" stroke-width="1.3"/><path d="M1 8h14" stroke="currentColor" stroke-width="1.3"/></svg>
+      Pay securely with Stripe
+    </button>
+    <div class="modal-stripe-note">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#9B9B94" stroke-width="1"/><path d="M6 5v3M6 4v.5" stroke="#9B9B94" stroke-width="1" stroke-linecap="round"/></svg>
+      Stripe handles all payments. We never see your card number.
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="logo">
+        <div class="logo-mark"><div class="logo-grid"><div></div><div></div><div></div><div></div></div></div>
+        <span class="logo-name">UX Audit Pro</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="audit.html">Start Audit</a>
+        <a href="how.html">How it works</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+      <div class="footer-copy">© 2025 UX Audit Pro</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+let currentPack = null;
+
+function checkout(pack, price) {
+  currentPack = { pack, price };
+  const titles = {
+    starter: 'Buy Starter pack',
+    professional: 'Buy Professional pack',
+    agency: 'Buy Agency pack'
+  };
+  const subs = {
+    starter: '5 audits · $9 · Credits never expire',
+    professional: '20 audits · $29 · Credits never expire',
+    agency: '100 audits · $99 · Credits never expire'
+  };
+  document.getElementById('modal-title').textContent = titles[pack];
+  document.getElementById('modal-sub').textContent = subs[pack];
+  document.getElementById('modal-pay-btn').textContent = '';
+  document.getElementById('modal-pay-btn').innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 5H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z" stroke="currentColor" stroke-width="1.3"/><path d="M1 8h14" stroke="currentColor" stroke-width="1.3"/></svg> Pay $${price} securely with Stripe`;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('checkout-email').focus();
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function processCheckout() {
+  const email = document.getElementById('checkout-email').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('checkout-email').style.borderColor = '#E24B4A';
+    document.getElementById('checkout-email').focus();
+    return;
+  }
+  // TODO: Replace this with your actual Stripe Payment Link or Stripe.js integration
+  // Example Stripe Payment Links:
+  // Starter:      https://buy.stripe.com/YOUR_STARTER_LINK
+  // Professional: https://buy.stripe.com/YOUR_PROFESSIONAL_LINK
+  // Agency:       https://buy.stripe.com/YOUR_AGENCY_LINK
+  const stripeLinks = {
+    starter:      'https://buy.stripe.com/YOUR_STARTER_LINK',
+    professional: 'https://buy.stripe.com/YOUR_PROFESSIONAL_LINK',
+    agency:       'https://buy.stripe.com/YOUR_AGENCY_LINK'
+  };
+  const url = stripeLinks[currentPack?.pack];
+  if (url && !url.includes('YOUR_')) {
+    window.location.href = url + '?prefilled_email=' + encodeURIComponent(email);
+  } else {
+    // Demo mode — show setup instructions
+    alert('Stripe not connected yet.\n\nTo enable payments:\n1. Create a Stripe account at stripe.com\n2. Create 3 Payment Links (one per pack)\n3. Replace the URLs in pricing.html line ~180');
+  }
+}
+
+function togglePfaq(el) {
+  const body = el.nextElementSibling;
+  const caret = el.querySelector('.pfaq-caret');
+  body.classList.toggle('open');
+  if (caret) caret.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
