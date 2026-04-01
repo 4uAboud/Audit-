@@ -510,6 +510,8 @@ Return ONLY valid JSON, no markdown fences, no explanation:
       })
     });
     const data = await res.json();
+    if (data.error) throw new Error(data.error.message || data.error);
+    if (!data.content) throw new Error('No response from AI. Check your API key in Vercel environment variables.');
     const raw = data.content.map(b=>b.text||'').join('');
     const result = JSON.parse(raw.replace(/```json|```/g,'').trim());
     setStatus('Analysis complete.', false);
