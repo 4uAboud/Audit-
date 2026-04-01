@@ -1,376 +1,613 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — UX Audit Pro</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --ink:#1A1A18; --ink-2:#3D3D3A; --ink-3:#6B6B65; --ink-4:#9B9B94;
-  --bg:#FAFAF8; --bg-2:#F2F2ED; --bg-3:#E8E8E1; --line:#E0E0D8;
-  --blue:#1A4FBD; --blue-light:#EEF3FF; --blue-mid:#4F7AE8;
-  --green:#1A6B3A; --green-bg:#E8F5EE;
-  --red:#8B2020; --red-bg:#FDEAEA;
-  --amber:#7A4A0A; --amber-bg:#FDF3E0;
-  --radius:10px; --radius-lg:16px;
-  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — UX Audit Pro</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1A1A18;
+      --ink-2: #3D3D3A;
+      --ink-3: #6B6B65;
+      --ink-4: #9B9B94;
+      --bg: #FAFAF8;
+      --bg-2: #F2F2ED;
+      --bg-3: #E8E8E1;
+      --line: #E0E0D8;
+      --blue: #1A4FBD;
+      --blue-light: #EEF3FF;
+      --blue-mid: #4F7AE8;
+      --green: #1A6B3A;
+      --green-bg: #E8F5EE;
+      --red: #8B2020;
+      --red-bg: #FDEAEA;
+      --amber: #7A4A0A;
+      --amber-bg: #FDF3E0;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
 
-/* Sidebar */
-.sidebar{width:220px;min-height:100vh;background:var(--ink);position:fixed;left:0;top:0;bottom:0;display:flex;flex-direction:column;z-index:100;}
-.sidebar-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px;text-decoration:none;}
-.sidebar-logo-mark{width:28px;height:28px;background:#fff;border-radius:5px;display:grid;grid-template-columns:1fr 1fr;gap:2.5px;padding:4px;flex-shrink:0;}
-.sidebar-logo-mark div{background:var(--ink);border-radius:1px;}
-.sidebar-logo-name{color:#fff;font-size:14px;font-weight:600;letter-spacing:-0.01em;}
-.sidebar-section{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;padding:16px 16px 6px;}
-.sidebar-nav{padding:8px 10px;flex:1;}
-.sidebar-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px;}
-.sidebar-link:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9);}
-.sidebar-link.active{background:rgba(255,255,255,0.12);color:#fff;}
-.sidebar-link.primary{background:var(--blue);color:#fff;margin-top:10px;}
-.sidebar-link.primary:hover{background:#1a45a8;}
-.sidebar-link svg{flex-shrink:0;opacity:0.7;}
-.sidebar-link.active svg,.sidebar-link.primary svg{opacity:1;}
-.sidebar-bottom{padding:14px;border-top:1px solid rgba(255,255,255,0.08);}
-.sidebar-user{display:flex;align-items:center;gap:8px;}
-.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue-mid);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
-.user-info{flex:1;min-width:0;}
-.user-name{color:#fff;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.user-email{color:rgba(255,255,255,0.4);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.logout-btn{background:none;border:none;color:rgba(255,255,255,0.35);cursor:pointer;font-size:16px;padding:4px;line-height:1;transition:color .15s;}
-.logout-btn:hover{color:rgba(255,255,255,0.7);}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Instrument Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      font-size: 16px;
+    }
 
-/* Main */
-.main{margin-left:220px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
-.topbar{height:60px;border-bottom:1px solid var(--line);padding:0 2rem;display:flex;align-items:center;gap:1rem;background:#fff;position:sticky;top:0;z-index:50;}
-.topbar-title{font-size:16px;font-weight:600;color:var(--ink);}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
-.btn-new{background:var(--blue);color:#fff;padding:8px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:opacity .15s;}
-.btn-new:hover{opacity:.85;}
-.content{padding:2rem;flex:1;}
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 220px;
+      height: 100vh;
+      background: var(--ink);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-/* Stats */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
-.stat-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;}
-.stat-label{font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-4);margin-bottom:.5rem;}
-.stat-val{font-family:'DM Serif Display',serif;font-size:32px;color:var(--ink);line-height:1;margin-bottom:4px;}
-.stat-sub{font-size:12px;color:var(--ink-4);}
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      color: rgba(255,255,255,0.6);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+      margin-bottom: 1px;
+    }
+    .sidebar-link:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    .sidebar-link.active {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .sidebar-link.new-study-btn {
+      background: var(--blue);
+      color: #fff !important;
+      margin-top: 8px;
+    }
+    .sidebar-link.new-study-btn:hover {
+      background: #1645a8;
+    }
 
-/* Filters */
-.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;}
-.section-title{font-size:18px;font-weight:600;color:var(--ink);}
-.filters{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
-.filter-input,.filter-select{height:36px;border:1px solid var(--line);border-radius:var(--radius);font-family:'Instrument Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);padding:0 12px;outline:none;transition:border-color .15s;}
-.filter-input{min-width:200px;}
-.filter-input:focus,.filter-select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,79,189,.08);}
+    .sidebar-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      opacity: 0.75;
+    }
+    .sidebar-link.active .sidebar-icon,
+    .sidebar-link.new-study-btn .sidebar-icon { opacity: 1; }
 
-/* Studies grid */
-.studies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;}
-.study-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.25rem;transition:box-shadow .15s,transform .15s;cursor:default;}
-.study-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
-.card-badges{display:flex;align-items:center;gap:6px;margin-bottom:.75rem;flex-wrap:wrap;}
-.badge-pill{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Instrument Sans',sans-serif;}
-.card-title{font-family:'DM Serif Display',serif;font-size:16px;color:var(--ink);margin-bottom:4px;line-height:1.35;}
-.card-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-4);margin-bottom:.75rem;}
-.card-score{font-family:'DM Serif Display',serif;font-size:36px;line-height:1;margin-bottom:.75rem;}
-.card-score span{font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:400;color:var(--ink-4);}
-.card-actions{display:flex;gap:6px;padding-top:.75rem;border-top:1px solid var(--line);}
-.card-btn{flex:1;text-align:center;padding:7px 10px;border-radius:var(--radius);font-size:12px;font-weight:500;font-family:'Instrument Sans',sans-serif;cursor:pointer;transition:all .15s;text-decoration:none;border:none;}
-.card-btn.primary{background:var(--ink);color:#fff;}
-.card-btn.primary:hover{opacity:.82;}
-.card-btn.ghost{background:none;border:1px solid var(--line);color:var(--ink-3);}
-.card-btn.ghost:hover{background:var(--bg-2);color:var(--ink);}
-.card-btn.danger{background:none;border:1px solid var(--line);color:var(--red);}
-.card-btn.danger:hover{background:var(--red-bg);}
+    /* ── Main ── */
+    .main {
+      margin-left: 220px;
+      min-height: 100vh;
+      background: var(--bg);
+    }
 
-/* Empty state */
-.empty-state{text-align:center;padding:4rem 2rem;grid-column:1/-1;}
-.empty-icon{font-size:48px;margin-bottom:1rem;}
-.empty-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--ink);margin-bottom:.5rem;}
-.empty-sub{font-size:14px;color:var(--ink-4);margin-bottom:1.5rem;}
-.empty-btn{display:inline-flex;align-items:center;gap:6px;padding:11px 24px;background:var(--blue);color:#fff;border-radius:var(--radius);font-size:14px;font-weight:500;text-decoration:none;transition:opacity .15s;}
-.empty-btn:hover{opacity:.85;}
+    /* ── Topbar ── */
+    .topbar {
+      height: 60px;
+      border-bottom: 1px solid var(--line);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .topbar-title {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+    }
 
-/* Quick actions */
-.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;}
-.quick-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.25rem;display:flex;align-items:flex-start;gap:.875rem;text-decoration:none;transition:all .15s;cursor:pointer;}
-.quick-card:hover{box-shadow:var(--shadow-md);border-color:var(--blue);}
-.quick-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
-.quick-card-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;}
-.quick-card-sub{font-size:12px;color:var(--ink-4);}
+    /* ── Button ── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Instrument Sans', sans-serif;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .btn-primary:hover {
+      background: #1645a8;
+      box-shadow: 0 2px 10px rgba(26,79,189,0.28);
+    }
 
-@media (max-width:900px) {
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
-  .quick-grid{grid-template-columns:repeat(2,1fr);}
-}
-@media (max-width:640px) {
-  .sidebar{display:none;}
-  .main{margin-left:0;}
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
-  .quick-grid{grid-template-columns:1fr;}
-}
-</style>
+    /* ── Stats Grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      transition: box-shadow 0.15s;
+    }
+    .stat-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-4);
+      margin-bottom: 0.5rem;
+    }
+    .stat-val {
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-trend {
+      font-size: 12px;
+      color: var(--ink-4);
+      font-family: 'Instrument Sans', sans-serif;
+    }
+
+    /* ── Studies section ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .section-title {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      width: 200px;
+      transition: border-color 0.15s;
+    }
+    .search-input::placeholder { color: var(--ink-4); }
+    .search-input:focus { border-color: var(--blue-mid); }
+
+    .filter-select {
+      height: 36px;
+      padding: 0 28px 0 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      color: var(--ink-3);
+      background: #fff;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239B9B94' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-color: #fff;
+    }
+    .filter-select:focus { border-color: var(--blue-mid); }
+
+    /* ── Studies Grid ── */
+    .studies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5rem 2rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+    }
+    .empty-emoji {
+      font-size: 52px;
+      margin-bottom: 1.2rem;
+      line-height: 1;
+    }
+    .empty-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+      font-weight: 400;
+    }
+    .empty-sub {
+      font-size: 14px;
+      color: var(--ink-4);
+      margin-bottom: 1.75rem;
+      font-family: 'Instrument Sans', sans-serif;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .search-input { width: 100%; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<aside class="sidebar">
-  <a href="index.html" class="sidebar-logo">
-    <div class="sidebar-logo-mark"><div></div><div></div><div></div><div></div></div>
-    <span class="sidebar-logo-name">UX Audit Pro</span>
-  </a>
-  <div class="sidebar-nav">
-    <div class="sidebar-section">Workspace</div>
-    <a href="dashboard.html" class="sidebar-link active">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>
-      Dashboard
-    </a>
-    <a href="#studies" class="sidebar-link" onclick="document.getElementById('studies-section').scrollIntoView({behavior:'smooth'});return false;">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3.5A1.5 1.5 0 013.5 2h5.086a1.5 1.5 0 011.06.44l2.915 2.914A1.5 1.5 0 0113 6.414V12.5A1.5 1.5 0 0111.5 14h-8A1.5 1.5 0 012 12.5v-9z" stroke="currentColor" stroke-width="1.3"/><path d="M9 2v3.5a.5.5 0 00.5.5H13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      My Studies
-    </a>
-    <a href="new-study.html" class="sidebar-link primary">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      New Study
-    </a>
-    <div class="sidebar-section" style="margin-top:8px;">Account</div>
-    <a href="pricing.html" class="sidebar-link">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.3"/></svg>
-      Billing
-    </a>
-    <a href="index.html" class="sidebar-link">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 13c.5-2 2.3-3.5 4.5-3.5s4 1.5 4.5 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      Profile
-    </a>
-  </div>
-  <div class="sidebar-bottom">
-    <div class="sidebar-user">
-      <div class="user-avatar" id="user-avatar">?</div>
-      <div class="user-info">
-        <div class="user-name" id="user-name">Loading…</div>
-        <div class="user-email" id="user-email"></div>
-      </div>
-      <button class="logout-btn" onclick="logout()" title="Sign out">↩</button>
-    </div>
-  </div>
-</aside>
+  <!-- ══════════════════ SIDEBAR ══════════════════ -->
+  <aside class="sidebar">
 
-<!-- Main -->
-<div class="main">
-  <div class="topbar">
-    <span class="topbar-title">Dashboard</span>
-    <div class="topbar-right">
-      <span id="plan-badge" style="font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:20px;background:var(--blue-light);color:var(--blue);font-weight:600;"></span>
-      <a href="new-study.html" class="btn-new">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <!-- Logo -->
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+        <div style="width:30px;height:30px;background:#fff;border-radius:6px;display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:5px;flex-shrink:0;">
+          <div style="background:#1A1A18;border-radius:1px;"></div>
+          <div style="background:#1A1A18;border-radius:1px;"></div>
+          <div style="background:#1A1A18;border-radius:1px;"></div>
+          <div style="background:#1A1A18;border-radius:1px;"></div>
+        </div>
+        <span style="color:#fff;font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:600;">UX Audit Pro</span>
+      </a>
+    </div>
+
+    <!-- Nav -->
+    <nav style="padding:12px 10px;flex:1;overflow-y:auto;">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;padding:8px 10px 6px;">Workspace</div>
+
+      <a href="dashboard.html" class="sidebar-link active">
+        <svg class="sidebar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.2"/>
+          <rect x="9" y="1.5" width="5.5" height="5.5" rx="1.2"/>
+          <rect x="1.5" y="9" width="5.5" height="5.5" rx="1.2"/>
+          <rect x="9" y="9" width="5.5" height="5.5" rx="1.2"/>
+        </svg>
+        Dashboard
+      </a>
+
+      <a href="dashboard.html#studies" class="sidebar-link">
+        <svg class="sidebar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 5a1.5 1.5 0 011.5-1.5h3.25L8 5h4.5A1.5 1.5 0 0114 6.5v5A1.5 1.5 0 0112.5 13h-9A1.5 1.5 0 012 11.5V5z"/>
+        </svg>
+        My Studies
+      </a>
+
+      <a href="new-study.html" class="sidebar-link new-study-btn">
+        <svg class="sidebar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3.5v9M3.5 8h9" stroke-linecap="round"/>
+        </svg>
+        New Study
+      </a>
+
+      <div style="margin-top:20px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;padding:8px 10px 6px;">Account</div>
+
+      <a href="#" class="sidebar-link">
+        <svg class="sidebar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="8" cy="8" r="2.25"/>
+          <path d="M8 1.5v1.25M8 13.25V14.5M1.5 8h1.25M13.25 8H14.5M3.4 3.4l.88.88M11.72 11.72l.88.88M11.72 3.4l-.88.88M4.28 11.72l-.88.88" stroke-linecap="round"/>
+        </svg>
+        Settings
+      </a>
+
+      <a href="pricing.html" class="sidebar-link">
+        <svg class="sidebar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1.5" y="4.5" width="13" height="8" rx="1.5"/>
+          <path d="M1.5 7.5h13" stroke-linecap="round"/>
+          <path d="M5 11h2" stroke-linecap="round"/>
+        </svg>
+        Billing
+      </a>
+    </nav>
+
+    <!-- User -->
+    <div id="sidebar-user" style="padding:16px;border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div id="user-avatar" style="width:32px;height:32px;border-radius:50%;background:#4F7AE8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;font-family:'Instrument Sans',sans-serif;flex-shrink:0;">?</div>
+        <div style="flex:1;min-width:0;">
+          <div id="user-name" style="color:#fff;font-size:13px;font-weight:500;font-family:'Instrument Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Loading...</div>
+          <div id="user-email" style="color:rgba(255,255,255,0.4);font-size:11px;font-family:'Instrument Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+        </div>
+        <button onclick="logout()" title="Logout"
+                style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:14px;padding:4px;line-height:1;transition:color 0.15s;"
+                onmouseenter="this.style.color='rgba(255,255,255,0.7)'"
+                onmouseleave="this.style.color='rgba(255,255,255,0.3)'">⏏</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+  <main class="main">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <span class="topbar-title">Dashboard</span>
+      <a href="new-study.html" class="btn-primary">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M6.5 1.5v10M1.5 6.5h10"/>
+        </svg>
         New Study
       </a>
     </div>
-  </div>
 
-  <div class="content">
+    <!-- Body -->
+    <div style="padding:2rem;">
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card" id="stat-total">
-        <div class="stat-label">Total Studies</div>
-        <div class="stat-val">0</div>
-        <div class="stat-sub">all time</div>
-      </div>
-      <div class="stat-card" id="stat-completed">
-        <div class="stat-label">Completed</div>
-        <div class="stat-val">0</div>
-        <div class="stat-sub">finished reports</div>
-      </div>
-      <div class="stat-card" id="stat-month">
-        <div class="stat-label">This Month</div>
-        <div class="stat-val">0</div>
-        <div class="stat-sub">new studies</div>
-      </div>
-      <div class="stat-card" id="stat-score">
-        <div class="stat-label">Avg UX Score</div>
-        <div class="stat-val">—</div>
-        <div class="stat-sub">across completed</div>
-      </div>
-    </div>
-
-    <!-- Quick actions -->
-    <div style="font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-4);margin-bottom:.75rem;">Quick start</div>
-    <div class="quick-grid">
-      <a href="new-study.html?m=ux-audit" class="quick-card">
-        <div class="quick-icon" style="background:var(--blue-light);">🔍</div>
-        <div>
-          <div class="quick-card-title">UX Audit</div>
-          <div class="quick-card-sub">Full multi-method evaluation</div>
+      <!-- ── Stats Row ── -->
+      <div class="stats-grid">
+        <div class="stat-card" id="stat-total">
+          <div class="stat-label">Total Studies</div>
+          <div class="stat-val">—</div>
+          <div class="stat-trend">All time</div>
         </div>
-      </a>
-      <a href="new-study.html?m=heuristic-evaluation" class="quick-card">
-        <div class="quick-icon" style="background:var(--green-bg);">📋</div>
-        <div>
-          <div class="quick-card-title">Heuristic Evaluation</div>
-          <div class="quick-card-sub">Nielsen's 10 heuristics</div>
+        <div class="stat-card" id="stat-completed">
+          <div class="stat-label">Completed</div>
+          <div class="stat-val">—</div>
+          <div class="stat-trend">Fully analysed</div>
         </div>
-      </a>
-      <a href="new-study.html?m=accessibility-review" class="quick-card">
-        <div class="quick-icon" style="background:var(--amber-bg);">♿</div>
-        <div>
-          <div class="quick-card-title">Accessibility Review</div>
-          <div class="quick-card-sub">WCAG compliance check</div>
+        <div class="stat-card" id="stat-month">
+          <div class="stat-label">This Month</div>
+          <div class="stat-val">—</div>
+          <div class="stat-trend">New studies</div>
         </div>
-      </a>
-    </div>
-
-    <!-- Studies -->
-    <div id="studies-section">
-      <div class="section-header">
-        <div class="section-title">My studies</div>
-        <div class="filters">
-          <input type="search" class="filter-input" id="search-input" placeholder="Search studies…" oninput="loadStudies()">
-          <select class="filter-select" id="method-filter" onchange="loadStudies()">
-            <option value="">All methodologies</option>
-            <option value="ux-audit">UX Audit</option>
-            <option value="heuristic-evaluation">Heuristic Evaluation</option>
-            <option value="accessibility-review">Accessibility Review</option>
-            <option value="cognitive-walkthrough">Cognitive Walkthrough</option>
-            <option value="expert-review">Expert Review</option>
-            <option value="usability-testing">Usability Testing</option>
-            <option value="user-interview">User Interview</option>
-            <option value="journey-review">Journey Map Review</option>
-          </select>
-          <select class="filter-select" id="status-filter" onchange="loadStudies()">
-            <option value="">All statuses</option>
-            <option value="completed">Completed</option>
-            <option value="in-progress">In Progress</option>
-            <option value="draft">Draft</option>
-          </select>
+        <div class="stat-card" id="stat-score">
+          <div class="stat-label">Avg Score</div>
+          <div class="stat-val">—</div>
+          <div class="stat-trend">Across completed</div>
         </div>
       </div>
 
-      <div class="studies-grid" id="studies-grid">
-        <!-- Populated by JS -->
+      <!-- ── Studies Section ── -->
+      <div style="margin-top:2rem;" id="studies">
+
+        <div class="section-header">
+          <span class="section-title">My studies</span>
+          <div class="filter-row">
+            <input
+              id="search-input"
+              class="search-input"
+              type="search"
+              placeholder="Search studies…"
+              autocomplete="off"
+            />
+            <select id="method-filter" class="filter-select">
+              <option value="">All methods</option>
+              <option value="heuristic-evaluation">Heuristic Evaluation</option>
+              <option value="accessibility-review">Accessibility Review</option>
+              <option value="cognitive-walkthrough">Cognitive Walkthrough</option>
+              <option value="expert-review">Expert Review</option>
+              <option value="ux-audit">UX Audit</option>
+            </select>
+            <select id="status-filter" class="filter-select">
+              <option value="">All statuses</option>
+              <option value="completed">Completed</option>
+              <option value="in-progress">In Progress</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state" style="display:none;">
+          <div class="empty-emoji">📋</div>
+          <div class="empty-title">No studies yet</div>
+          <p class="empty-sub">Run your first audit to see results here</p>
+          <a href="new-study.html" class="btn-primary">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M6.5 1.5v10M1.5 6.5h10"/>
+            </svg>
+            Start New Study
+          </a>
+        </div>
+
+        <!-- Studies Grid -->
+        <div id="studies-grid" class="studies-grid" style="display:none;"></div>
+
       </div>
     </div>
+  </main>
 
-  </div>
-</div>
+  <!-- ══════════════════ JAVASCRIPT ══════════════════ -->
+  <script>
+    // ── Auth check ──
+    const user = JSON.parse(localStorage.getItem('uxap_user') || 'null');
+    if (!user) window.location.href = 'login.html';
 
-<script>
-// ── Auth ──
-const user = JSON.parse(localStorage.getItem('uxap_user') || 'null');
-if (!user) { window.location.href = 'login.html'; }
+    // ── Populate sidebar user ──
+    document.getElementById('user-name').textContent  = user?.name  || 'User';
+    document.getElementById('user-email').textContent = user?.email || '';
+    document.getElementById('user-avatar').textContent = (user?.name || 'U')[0].toUpperCase();
 
-document.getElementById('user-name').textContent = user?.name || 'User';
-document.getElementById('user-email').textContent = user?.email || '';
-document.getElementById('user-avatar').textContent = (user?.name || 'U')[0].toUpperCase();
-const planLabel = {free:'Free',starter:'Starter',pro:'Pro',team:'Team'};
-document.getElementById('plan-badge').textContent = planLabel[user?.plan || 'free'] + ' Plan';
+    function logout() {
+      localStorage.removeItem('uxap_user');
+      window.location.href = 'login.html';
+    }
 
-function logout() {
-  localStorage.removeItem('uxap_user');
-  window.location.href = 'login.html';
-}
+    // ── Helpers ──
+    function scoreColor(s) {
+      return s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--amber)' : 'var(--red)';
+    }
 
-// ── Helpers ──
-const methodColors = {
-  'heuristic-evaluation':'background:var(--blue-light);color:var(--blue)',
-  'accessibility-review':'background:var(--green-bg);color:var(--green)',
-  'cognitive-walkthrough':'background:var(--amber-bg);color:var(--amber)',
-  'expert-review':'background:var(--amber-bg);color:var(--amber)',
-  'ux-audit':'background:var(--blue-light);color:var(--blue)',
-  'usability-testing':'background:#F3EEF9;color:#6B21A8',
-  'user-interview':'background:#FEF3C7;color:#92400E',
-  'journey-review':'background:#E0F2FE;color:#0369A1',
-};
-const statusStyle = {
-  completed:'background:var(--green-bg);color:var(--green)',
-  'in-progress':'background:var(--amber-bg);color:var(--amber)',
-  draft:'background:var(--bg-3);color:var(--ink-3)'
-};
-function scoreColor(s){return s>=70?'var(--green)':s>=40?'var(--amber)':'var(--red)';}
+    const methodColors = {
+      'heuristic-evaluation': 'background:var(--blue-light);color:var(--blue)',
+      'accessibility-review':  'background:var(--green-bg);color:var(--green)',
+      'cognitive-walkthrough': 'background:var(--amber-bg);color:var(--amber)',
+      'expert-review':         'background:var(--amber-bg);color:var(--amber)',
+      'ux-audit':              'background:var(--blue-light);color:var(--blue)',
+    };
+    const statusStyle = {
+      'completed':   'background:var(--green-bg);color:var(--green)',
+      'in-progress': 'background:var(--amber-bg);color:var(--amber)',
+      'draft':       'background:var(--bg-3);color:var(--ink-3)',
+    };
 
-function buildCard(study) {
-  const score = study.result?.overall_score;
-  const mColor = methodColors[study.methodology]||'background:var(--bg-2);color:var(--ink-3)';
-  const sColor = statusStyle[study.status]||statusStyle.draft;
-  const statusLabel = study.status==='in-progress'?'In Progress':study.status==='completed'?'Completed':'Draft';
-  const date = new Date(study.createdAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-  return `<div class="study-card">
-    <div class="card-badges">
-      <span class="badge-pill" style="${mColor}">${study.methodologyName||'UX Study'}</span>
-      <span class="badge-pill" style="${sColor};margin-left:auto;">${statusLabel}</span>
-    </div>
-    <div class="card-title">${study.title}</div>
-    <div class="card-date">${date}</div>
-    ${score!=null?`<div class="card-score" style="color:${scoreColor(score)};">${score}<span>/100</span></div>`:''}
-    <div class="card-actions">
-      <a href="audit.html?studyId=${study.id}" class="card-btn primary">Open report</a>
-      <button onclick="duplicateStudy('${study.id}')" class="card-btn ghost">Copy</button>
-      <button onclick="deleteStudy('${study.id}')" class="card-btn danger">Delete</button>
-    </div>
-  </div>`;
-}
+    // ── Build study card ──
+    function buildStudyCard(study) {
+      const score  = study.result?.overall_score;
+      const mColor = methodColors[study.methodology] || 'background:var(--bg-2);color:var(--ink-3)';
+      const sColor = statusStyle[study.status] || statusStyle.draft;
+      const date   = new Date(study.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const statusLabel = study.status === 'in-progress' ? 'In Progress'
+                        : study.status === 'completed'   ? 'Completed'
+                        : 'Draft';
 
-function loadStudies() {
-  const studies = JSON.parse(localStorage.getItem('uxap_studies')||'[]');
+      return `<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.25rem;transition:box-shadow .15s;"
+                   onmouseenter="this.style.boxShadow='0 4px 16px rgba(0,0,0,.09)'"
+                   onmouseleave="this.style.boxShadow='none'">
 
-  // Stats
-  const completed = studies.filter(s=>s.status==='completed');
-  const now = new Date();
-  const thisMonth = studies.filter(s=>{ const d=new Date(s.createdAt); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); });
-  const scores = completed.filter(s=>s.result?.overall_score!=null).map(s=>s.result.overall_score);
-  const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:.75rem;">
+          <span style="${mColor};padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Instrument Sans',sans-serif;line-height:1.5;white-space:nowrap;">
+            ${study.methodologyName || 'UX Study'}
+          </span>
+          <span style="${sColor};padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Instrument Sans',sans-serif;line-height:1.5;margin-left:auto;white-space:nowrap;">
+            ${statusLabel}
+          </span>
+        </div>
 
-  document.getElementById('stat-total').querySelector('.stat-val').textContent = studies.length;
-  document.getElementById('stat-completed').querySelector('.stat-val').textContent = completed.length;
-  document.getElementById('stat-month').querySelector('.stat-val').textContent = thisMonth.length;
-  document.getElementById('stat-score').querySelector('.stat-val').textContent = avg??'—';
+        <div style="font-family:'DM Serif Display',serif;font-size:16px;color:var(--ink);margin-bottom:4px;line-height:1.35;">${study.title}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-4);margin-bottom:.75rem;">${date}</div>
 
-  // Filter
-  const q = (document.getElementById('search-input')?.value||'').toLowerCase();
-  const mF = document.getElementById('method-filter')?.value||'';
-  const sF = document.getElementById('status-filter')?.value||'';
-  let filtered = studies;
-  if(q) filtered=filtered.filter(s=>s.title.toLowerCase().includes(q)||(s.methodologyName||'').toLowerCase().includes(q));
-  if(mF) filtered=filtered.filter(s=>s.methodology===mF);
-  if(sF) filtered=filtered.filter(s=>s.status===sF);
+        ${score != null ? `<div style="display:flex;align-items:baseline;gap:3px;margin-bottom:2px;">
+          <span style="font-family:'DM Serif Display',serif;font-size:34px;font-weight:700;color:${scoreColor(score)};line-height:1;">${score}</span>
+          <span style="font-size:13px;color:var(--ink-4);font-family:'Instrument Sans',sans-serif;">/100</span>
+        </div>` : ''}
 
-  const grid = document.getElementById('studies-grid');
-  if(!filtered.length) {
-    grid.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">📋</div>
-      <div class="empty-title">${studies.length?'No matches found':'No studies yet'}</div>
-      <div class="empty-sub">${studies.length?'Try adjusting your filters.':'Run your first audit to see it here.'}</div>
-      ${!studies.length?`<a href="new-study.html" class="empty-btn">Start a new study →</a>`:''}
-    </div>`;
-  } else {
-    grid.innerHTML = filtered.map(buildCard).join('');
-  }
-}
+        <div style="display:flex;gap:6px;margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--line);">
+          <a href="audit.html?studyId=${study.id}&view=report"
+             style="flex:1;text-align:center;padding:7px;background:var(--ink);color:#fff;border-radius:var(--radius);font-size:12px;font-weight:500;font-family:'Instrument Sans',sans-serif;text-decoration:none;transition:background .12s;"
+             onmouseenter="this.style.background='var(--ink-2)'"
+             onmouseleave="this.style.background='var(--ink)'">Open report</a>
+          <button onclick="duplicateStudy('${study.id}')"
+                  style="padding:7px 11px;border:1px solid var(--line);border-radius:var(--radius);background:none;font-size:12px;color:var(--ink-3);cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:border-color .12s,color .12s;"
+                  onmouseenter="this.style.borderColor='var(--ink-3)';this.style.color='var(--ink)'"
+                  onmouseleave="this.style.borderColor='var(--line)';this.style.color='var(--ink-3)'">Copy</button>
+          <button onclick="deleteStudy('${study.id}')"
+                  style="padding:7px 11px;border:1px solid var(--line);border-radius:var(--radius);background:none;font-size:12px;color:var(--red);cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:background .12s,border-color .12s;"
+                  onmouseenter="this.style.background='var(--red-bg)';this.style.borderColor='var(--red)'"
+                  onmouseleave="this.style.background='none';this.style.borderColor='var(--line)'">Delete</button>
+        </div>
+      </div>`;
+    }
 
-function deleteStudy(id) {
-  if(!confirm('Delete this study? This cannot be undone.')) return;
-  const s = JSON.parse(localStorage.getItem('uxap_studies')||'[]').filter(x=>x.id!==id);
-  localStorage.setItem('uxap_studies',JSON.stringify(s));
-  loadStudies();
-}
+    // ── Load & render ──
+    function loadStudies() {
+      const studies = JSON.parse(localStorage.getItem('uxap_studies') || '[]');
 
-function duplicateStudy(id) {
-  const studies = JSON.parse(localStorage.getItem('uxap_studies')||'[]');
-  const orig = studies.find(s=>s.id===id);
-  if(!orig) return;
-  const copy = {...orig, id:'study_'+Date.now(), title:orig.title+' (copy)', createdAt:new Date().toISOString(), screenshots:[]};
-  studies.unshift(copy);
-  localStorage.setItem('uxap_studies',JSON.stringify(studies));
-  loadStudies();
-}
+      const completed = studies.filter(s => s.status === 'completed');
+      const now       = new Date();
+      const thisMonth = studies.filter(s => {
+        const d = new Date(s.createdAt);
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      });
+      const scores  = completed.filter(s => s.result?.overall_score != null).map(s => s.result.overall_score);
+      const avgScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
 
-loadStudies();
-</script>
+      document.getElementById('stat-total').querySelector('.stat-val').textContent     = studies.length;
+      document.getElementById('stat-completed').querySelector('.stat-val').textContent = completed.length;
+      document.getElementById('stat-month').querySelector('.stat-val').textContent     = thisMonth.length;
+      document.getElementById('stat-score').querySelector('.stat-val').textContent     = avgScore ?? '—';
+
+      const grid  = document.getElementById('studies-grid');
+      const empty = document.getElementById('empty-state');
+
+      if (!studies.length) {
+        empty.style.display = 'flex';
+        grid.style.display  = 'none';
+        return;
+      }
+      empty.style.display = 'none';
+      grid.style.display  = 'grid';
+
+      const q       = (document.getElementById('search-input')?.value || '').toLowerCase();
+      const mFilter = document.getElementById('method-filter')?.value  || '';
+      const sFilter = document.getElementById('status-filter')?.value  || '';
+
+      let filtered = studies;
+      if (q)       filtered = filtered.filter(s => s.title.toLowerCase().includes(q) || (s.methodologyName || '').toLowerCase().includes(q));
+      if (mFilter) filtered = filtered.filter(s => s.methodology === mFilter);
+      if (sFilter) filtered = filtered.filter(s => s.status === sFilter);
+
+      grid.innerHTML = filtered.length
+        ? filtered.map(study => buildStudyCard(study)).join('')
+        : `<p style="color:var(--ink-4);font-size:14px;grid-column:1/-1;font-family:'Instrument Sans',sans-serif;padding:1rem 0;">No studies match your filters.</p>`;
+    }
+
+    function deleteStudy(id) {
+      if (!confirm('Delete this study? This cannot be undone.')) return;
+      const studies = JSON.parse(localStorage.getItem('uxap_studies') || '[]').filter(s => s.id !== id);
+      localStorage.setItem('uxap_studies', JSON.stringify(studies));
+      loadStudies();
+    }
+
+    function duplicateStudy(id) {
+      const studies = JSON.parse(localStorage.getItem('uxap_studies') || '[]');
+      const orig    = studies.find(s => s.id === id);
+      if (!orig) return;
+      const copy = { ...orig, id: 'study_' + Date.now(), title: orig.title + ' (copy)', createdAt: new Date().toISOString() };
+      studies.unshift(copy);
+      localStorage.setItem('uxap_studies', JSON.stringify(studies));
+      loadStudies();
+    }
+
+    // ── Init ──
+    loadStudies();
+    document.getElementById('search-input')?.addEventListener('input', loadStudies);
+    document.getElementById('method-filter')?.addEventListener('change', loadStudies);
+    document.getElementById('status-filter')?.addEventListener('change', loadStudies);
+  </script>
 </body>
 </html>
