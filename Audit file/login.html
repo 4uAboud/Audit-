@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — UX Audit Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* ─── Auth Layout ─── */
+  body { overflow-x: hidden; }
+
+  .auth-wrap {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── Left Panel ─── */
+  .auth-left {
+    width: 42%;
+    flex-shrink: 0;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .auth-left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .auth-logo-mark {
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .auth-logo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .auth-logo-grid div {
+    background: #fff;
+    border-radius: 1.5px;
+  }
+
+  .auth-logo-grid div:nth-child(2),
+  .auth-logo-grid div:nth-child(3) {
+    opacity: 0.45;
+  }
+
+  .auth-brand-name {
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .auth-left-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    padding: 40px 0;
+  }
+
+  .auth-quote {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.7rem, 2.6vw, 2.4rem);
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 2.5rem;
+  }
+
+  .auth-quote em {
+    font-style: italic;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .auth-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 3rem;
+  }
+
+  .auth-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: rgba(255,255,255,0.82);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+
+  .auth-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .auth-check svg { display: block; }
+
+  .auth-trust {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .auth-trust-avatars {
+    display: flex;
+  }
+
+  .auth-trust-avatars span {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    margin-left: -8px;
+  }
+
+  .auth-trust-avatars span:first-child { margin-left: 0; }
+
+  .auth-trust-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+  }
+
+  .auth-trust-text strong {
+    color: rgba(255,255,255,0.82);
+    font-weight: 500;
+  }
+
+  /* ─── Right Panel ─── */
+  .auth-right {
+    flex: 1;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 40px;
+    position: relative;
+  }
+
+  .auth-form-wrap {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .auth-form-header {
+    margin-bottom: 2rem;
+  }
+
+  .auth-form-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-4);
+    margin-bottom: 6px;
+  }
+
+  .auth-form-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.9rem;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .auth-form-subtitle {
+    font-size: 14px;
+    color: var(--ink-3);
+  }
+
+  /* ─── Tabs ─── */
+  .auth-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 3px;
+    margin-bottom: 1.75rem;
+  }
+
+  .auth-tab {
+    flex: 1;
+    padding: 9px 16px;
+    border: none;
+    background: transparent;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .auth-tab.active {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  /* ─── Form elements ─── */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+  }
+
+  .form-input::placeholder { color: var(--ink-4); }
+
+  .form-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26,79,189,0.1);
+  }
+
+  .form-input.error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(139,32,32,0.08);
+  }
+
+  /* ─── Password strength ─── */
+  .password-wrap { position: relative; }
+
+  .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-4);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  .strength-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .strength-seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--bg-3);
+    transition: background 0.25s;
+  }
+
+  .strength-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    margin-top: 5px;
+  }
+
+  /* ─── Checkbox row ─── */
+  .form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .form-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 4px;
+    accent-color: var(--blue);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .form-check-label {
+    font-size: 13.5px;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  .form-check-label a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ─── Forgot / meta links ─── */
+  .form-row-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .form-forgot {
+    font-size: 13px;
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  /* ─── Submit button ─── */
+  .auth-submit {
+    width: 100%;
+    padding: 13px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--ink);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: opacity 0.15s;
+    margin-top: 1.25rem;
+  }
+
+  .auth-submit:hover { opacity: 0.85; }
+  .auth-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ─── Social proof ─── */
+  .auth-social-proof {
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-4);
+    margin-top: 1.25rem;
+    letter-spacing: 0.01em;
+  }
+
+  .auth-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 1.5rem 0;
+  }
+
+  /* ─── Error / info messages ─── */
+  .auth-message {
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    margin-bottom: 1rem;
+    display: none;
+  }
+
+  .auth-message.error {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid rgba(139,32,32,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .auth-message.info {
+    background: var(--blue-light);
+    color: var(--blue);
+    border: 1px solid rgba(26,79,189,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ─── Verify gate ─── */
+  .verify-gate {
+    background: var(--amber-bg);
+    border: 1px solid rgba(122,74,10,0.18);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 1rem;
+    display: none;
+  }
+
+  .verify-gate-title {
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--amber);
+    margin-bottom: 4px;
+  }
+
+  .verify-gate-text {
+    font-size: 13px;
+    color: var(--amber);
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 860px) {
+    .auth-left { width: 38%; padding: 36px 32px; }
+    .auth-quote { font-size: 1.5rem; }
+  }
+
+  @media (max-width: 640px) {
+    .auth-wrap { flex-direction: column; min-height: 100vh; }
+    .auth-left { width: 100%; padding: 32px 24px; min-height: auto; }
+    .auth-left-body { padding: 24px 0; }
+    .auth-quote { font-size: 1.5rem; }
+    .auth-right { padding: 32px 20px; align-items: flex-start; }
+    .auth-form-wrap { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="auth-wrap">
+
+  <!-- ─── Left Panel ─── -->
+  <div class="auth-left">
+
+    <div class="auth-brand">
+      <div class="auth-logo-mark">
+        <div class="auth-logo-grid">
+          <div></div><div></div><div></div><div></div>
+        </div>
+      </div>
+      <span class="auth-brand-name">UX Audit Pro</span>
+    </div>
+
+    <div class="auth-left-body">
+      <h2 class="auth-quote">
+        Research that reveals.<br>
+        <em>Design that persuades.</em>
+      </h2>
+
+      <ul class="auth-features">
+        <li>
+          <div class="auth-check">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          8 research methodologies — heuristics, WCAG, cognitive walkthroughs, and more
+        </li>
+        <li>
+          <div class="auth-check">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          AI-generated reports in minutes — stakeholder-ready with severity scores and roadmaps
+        </li>
+        <li>
+          <div class="auth-check">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          Collaborative workspace — annotate screens and share findings with your team
+        </li>
+      </ul>
+
+      <div class="auth-trust">
+        <div class="auth-trust-avatars">
+          <span>AK</span>
+          <span>JR</span>
+          <span>ML</span>
+          <span>SB</span>
+          <span>+</span>
+        </div>
+        <div class="auth-trust-text">
+          <strong>Trusted by UX teams at 200+ companies</strong><br>
+          from startups to enterprise
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── Right Panel ─── -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+
+      <div class="auth-form-header">
+        <div class="auth-form-eyebrow">Welcome</div>
+        <h1 class="auth-form-title">Get started</h1>
+        <p class="auth-form-subtitle">Sign in to your workspace or create a free account.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign in</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create account</button>
+      </div>
+
+      <!-- Error / info message area -->
+      <div class="auth-message" id="auth-msg"></div>
+
+      <!-- Verify gate -->
+      <div class="verify-gate" id="verify-gate">
+        <div class="verify-gate-title">Email verification required</div>
+        <div class="verify-gate-text">Multiple free trials detected from this device. Please verify your email address to continue. Check your inbox for a verification link.</div>
+      </div>
+
+      <!-- ─── Sign in form ─── -->
+      <form id="form-signin" onsubmit="handleSignin(event)">
+        <div class="form-group">
+          <label class="form-label" for="si-email">Email address</label>
+          <input class="form-input" type="email" id="si-email" placeholder="you@company.com" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="si-password">Password</label>
+          <div class="password-wrap">
+            <input class="form-input" type="password" id="si-password" placeholder="Your password" autocomplete="current-password" required style="padding-right:44px;">
+            <button type="button" class="password-toggle" onclick="togglePassword('si-password', this)" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" id="si-eye">
+                <path d="M1 12C1 12 5 5 12 5C19 5 23 12 23 12C23 12 19 19 12 19C5 19 1 12 1 12Z" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row-meta">
+          <label class="form-check">
+            <input type="checkbox" id="si-remember">
+            <span class="form-check-label">Remember me</span>
+          </label>
+          <span class="form-forgot" onclick="handleForgotPassword()">Forgot password?</span>
+        </div>
+
+        <button type="submit" class="auth-submit" id="btn-signin">Sign in</button>
+
+        <div class="auth-social-proof">No credit card required · 1 free audit included</div>
+      </form>
+
+      <!-- ─── Create account form ─── -->
+      <form id="form-signup" style="display:none;" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label class="form-label" for="su-name">Full name</label>
+          <input class="form-input" type="text" id="su-name" placeholder="Your full name" autocomplete="name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="su-email">Email address</label>
+          <input class="form-input" type="email" id="su-email" placeholder="you@company.com" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="su-password">Password</label>
+          <div class="password-wrap">
+            <input class="form-input" type="password" id="su-password" placeholder="Create a password" autocomplete="new-password" required style="padding-right:44px;" oninput="checkStrength(this.value)">
+            <button type="button" class="password-toggle" onclick="togglePassword('su-password', this)" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M1 12C1 12 5 5 12 5C19 5 23 12 23 12C23 12 19 19 12 19C5 19 1 12 1 12Z" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+          </div>
+          <div class="strength-bar">
+            <div class="strength-seg" id="str-1"></div>
+            <div class="strength-seg" id="str-2"></div>
+            <div class="strength-seg" id="str-3"></div>
+            <div class="strength-seg" id="str-4"></div>
+          </div>
+          <div class="strength-label" id="str-label"></div>
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label class="form-check">
+            <input type="checkbox" id="su-terms" required>
+            <span class="form-check-label">
+              I agree to the <a href="#" onclick="return false;">Terms of Service</a> and <a href="#" onclick="return false;">Privacy Policy</a>
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" class="auth-submit" id="btn-signup">Create free account</button>
+
+        <div class="auth-social-proof">No credit card required · 1 free audit included</div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Tab switching ───
+function switchTab(tab) {
+  const isSignin = tab === 'signin';
+  document.getElementById('form-signin').style.display = isSignin ? '' : 'none';
+  document.getElementById('form-signup').style.display = isSignin ? 'none' : '';
+  document.getElementById('tab-signin').classList.toggle('active', isSignin);
+  document.getElementById('tab-signup').classList.toggle('active', !isSignin);
+  clearMessage();
+}
+
+// ─── Message helpers ───
+function showMessage(text, type) {
+  const el = document.getElementById('auth-msg');
+  el.className = 'auth-message ' + type;
+  el.innerHTML = (type === 'error'
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
+    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
+  ) + text;
+  el.style.display = 'flex';
+}
+
+function clearMessage() {
+  const el = document.getElementById('auth-msg');
+  el.style.display = 'none';
+  el.className = 'auth-message';
+}
+
+// ─── Password toggle ───
+function togglePassword(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const isText = input.type === 'text';
+  input.type = isText ? 'password' : 'text';
+  btn.style.opacity = isText ? '1' : '0.5';
+}
+
+// ─── Password strength ───
+function checkStrength(val) {
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+
+  const colors = ['', '#D94F4F', '#E07C3A', '#D4A017', '#2E7D4F'];
+  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+
+  for (let i = 1; i <= 4; i++) {
+    const seg = document.getElementById('str-' + i);
+    seg.style.background = i <= score ? colors[score] : 'var(--bg-3)';
+  }
+  document.getElementById('str-label').textContent = val.length ? labels[score] : '';
+  document.getElementById('str-label').style.color = colors[score] || 'var(--ink-4)';
+}
+
+// ─── Device fingerprint ───
+async function getFingerprint() {
+  const raw = navigator.userAgent + screen.width + screen.height + navigator.language + (navigator.hardwareConcurrency || 0);
+  const encoder = new TextEncoder();
+  const data = encoder.encode(raw);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function checkFingerprintAbuse() {
+  const fp = await getFingerprint();
+  const stored = localStorage.getItem('uxap_fp');
+  let count = parseInt(localStorage.getItem('uxap_fp_count') || '0', 10);
+
+  if (!stored) {
+    localStorage.setItem('uxap_fp', fp);
+    localStorage.setItem('uxap_fp_count', '1');
+    return false; // not abuse
+  }
+
+  if (stored === fp) {
+    count++;
+    localStorage.setItem('uxap_fp_count', count.toString());
+    if (count > 2) {
+      return true; // same device, too many trials
+    }
+  }
+  return false;
+}
+
+async function storeFingerprint() {
+  const fp = await getFingerprint();
+  const stored = localStorage.getItem('uxap_fp');
+  if (!stored) {
+    localStorage.setItem('uxap_fp', fp);
+    localStorage.setItem('uxap_fp_count', '1');
+  } else if (stored === fp) {
+    const count = parseInt(localStorage.getItem('uxap_fp_count') || '1', 10);
+    localStorage.setItem('uxap_fp_count', (count + 1).toString());
+  }
+}
+
+// ─── Auth check on load ───
+(function checkAlreadyLoggedIn() {
+  try {
+    const user = JSON.parse(localStorage.getItem('uxap_user') || 'null');
+    if (user && user.id) {
+      window.location.href = 'dashboard.html';
+    }
+  } catch (e) {}
+})();
+
+// ─── Sign in ───
+async function handleSignin(e) {
+  e.preventDefault();
+  clearMessage();
+
+  const email = document.getElementById('si-email').value.trim();
+  const password = document.getElementById('si-password').value;
+  const remember = document.getElementById('si-remember').checked;
+
+  if (!email || !password) {
+    showMessage('Please enter your email and password.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('btn-signin');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+
+  // Simulate async auth — check localStorage for existing user
+  await new Promise(r => setTimeout(r, 480));
+
+  try {
+    const existing = JSON.parse(localStorage.getItem('uxap_user') || 'null');
+    if (existing && existing.email === email) {
+      // Existing user found — log in
+      localStorage.setItem('uxap_user', JSON.stringify(existing));
+      window.location.href = 'dashboard.html';
+    } else {
+      // No stored user — create session for demo purposes
+      const user = {
+        id: crypto.randomUUID(),
+        name: email.split('@')[0],
+        email,
+        plan: 'free',
+        credits: 1,
+        createdAt: new Date().toISOString()
+      };
+      localStorage.setItem('uxap_user', JSON.stringify(user));
+      window.location.href = 'dashboard.html';
+    }
+  } catch (err) {
+    showMessage('Something went wrong. Please try again.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Sign in';
+  }
+}
+
+// ─── Sign up ───
+async function handleSignup(e) {
+  e.preventDefault();
+  clearMessage();
+
+  const name = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const password = document.getElementById('su-password').value;
+  const terms = document.getElementById('su-terms').checked;
+
+  if (!name || !email || !password) {
+    showMessage('Please fill in all fields.', 'error');
+    return;
+  }
+
+  if (password.length < 8) {
+    showMessage('Password must be at least 8 characters.', 'error');
+    return;
+  }
+
+  if (!terms) {
+    showMessage('Please agree to the Terms of Service to continue.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('btn-signup');
+  btn.disabled = true;
+  btn.textContent = 'Creating account…';
+
+  // Check fingerprint abuse
+  const isAbuse = await checkFingerprintAbuse();
+  if (isAbuse) {
+    document.getElementById('verify-gate').style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Create free account';
+    return;
+  }
+
+  await new Promise(r => setTimeout(r, 520));
+
+  try {
+    await storeFingerprint();
+
+    const user = {
+      id: crypto.randomUUID(),
+      name,
+      email,
+      plan: 'free',
+      credits: 1,
+      createdAt: new Date().toISOString()
+    };
+
+    localStorage.setItem('uxap_user', JSON.stringify(user));
+    window.location.href = 'dashboard.html';
+  } catch (err) {
+    showMessage('Something went wrong. Please try again.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Create free account';
+  }
+}
+
+// ─── Forgot password ───
+function handleForgotPassword() {
+  const email = document.getElementById('si-email').value.trim();
+  if (email) {
+    showMessage('Password reset link sent to ' + email + '. Check your inbox.', 'info');
+  } else {
+    showMessage('Enter your email address above, then click "Forgot password?"', 'info');
+  }
+}
+</script>
+</body>
+</html>

@@ -23,20 +23,24 @@
     </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link active">Home</a>
-      <a href="audit.html" class="nav-link">Start Audit</a>
+      <a href="new-study.html" class="nav-link">Start Audit</a>
       <a href="how.html" class="nav-link">How it works</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
     </div>
-    <a href="pricing.html" class="btn-nav">View pricing</a>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <a href="login.html" id="nav-login-btn" class="nav-link" style="font-size:13px;">Sign in</a>
+      <a href="new-study.html" id="nav-cta-btn" class="btn-nav">Start free →</a>
+    </div>
     <button class="nav-toggle" onclick="toggleNav()">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-mobile" id="nav-mobile">
     <a href="index.html" class="nav-link active">Home</a>
-    <a href="audit.html" class="nav-link">Start Audit</a>
+    <a href="new-study.html" class="nav-link">Start Audit</a>
     <a href="how.html" class="nav-link">How it works</a>
-    <a href="audit.html" class="btn-nav" style="margin-top:8px;display:inline-block;">Start free audit →</a>
+    <a href="dashboard.html" class="nav-link" id="nav-mobile-dashboard" style="display:none;">Dashboard</a>
+    <a href="new-study.html" class="btn-nav" style="margin-top:8px;display:inline-block;">Start free audit →</a>
   </div>
 </nav>
 
@@ -57,7 +61,7 @@
       </h1>
       <p class="hero-sub">Upload your screenshots and descriptions. Get heuristic evaluation, accessibility audit, competitive benchmarking, and actionable reports — all powered by AI.</p>
       <div class="hero-actions">
-        <a href="audit.html" class="btn-primary">Start your free audit</a>
+        <a href="new-study.html" class="btn-primary">Start your free audit</a>
         <a href="how.html" class="btn-ghost">See how it works →</a>
       </div>
       <div class="hero-trust">
@@ -249,6 +253,18 @@
 function toggleNav() {
   document.getElementById('nav-mobile').classList.toggle('open');
 }
+// Update nav based on auth state
+(function() {
+  const user = JSON.parse(localStorage.getItem('uxap_user') || 'null');
+  if (user) {
+    const loginBtn = document.getElementById('nav-login-btn');
+    const ctaBtn = document.getElementById('nav-cta-btn');
+    const mDash = document.getElementById('nav-mobile-dashboard');
+    if (loginBtn) { loginBtn.textContent = 'Dashboard'; loginBtn.href = 'dashboard.html'; }
+    if (ctaBtn) { ctaBtn.textContent = 'New Study →'; ctaBtn.href = 'new-study.html'; }
+    if (mDash) mDash.style.display = '';
+  }
+})();
 </script>
 </body>
 </html>

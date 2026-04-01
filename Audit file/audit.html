@@ -548,6 +548,7 @@ Return ONLY valid JSON, no markdown, no explanation. Be concise — short string
     setStatus('Analysis complete.', false);
     document.getElementById('ss5').style.display = '';
     useCredit();
+    saveStudyToHistory(result);
     renderResults(result, selDList, compList);
     goStep(5);
   } catch(err) {
@@ -714,8 +715,9 @@ function renderResults(r, dims, compList) {
     </div>
 
     <div class="export-actions">
-      <button class="btn-export primary" onclick="exportReport(window._lastResult)">Download report (HTML)</button>
-      <button class="btn-export" onclick="copyMarkdown(window._lastResult)">Copy as Markdown</button>
+      <a href="dashboard.html" class="btn-export primary" style="text-decoration:none;">← Back to dashboard</a>
+      <button class="btn-export" onclick="exportReport(window._lastResult)">Download HTML</button>
+      <button class="btn-export" onclick="openAnnotationTool()">Annotate screens</button>
       <button class="btn-export" onclick="window.print()">Print / PDF</button>
     </div>`;
 
@@ -815,6 +817,217 @@ function copyMarkdown(r) {
   navigator.clipboard.writeText(md).then(()=>alert('Markdown copied to clipboard!')).catch(()=>alert('Copy failed — please use the Download button instead.'));
 }
 
+
+// ── Annotation tool ──────────────────────────────────────────
+let annotationModal = null, annotCtx = null, annotCanvas = null;
+let isDrawing = false, startX = 0, startY = 0, currentAnnotations = [], currentImgIdx = 0;
+
+function openAnnotationTool() {
+  if (!imgDataURLs.length) { alert('No screenshots uploaded to annotate.'); return; }
+  currentImgIdx = 0;
+  currentAnnotations = [];
+  showAnnotationModal();
+}
+
+function showAnnotationModal() {
+  const existing = document.getElementById('annot-modal');
+  if (existing) existing.remove();
+  const issues = (window._lastResult?.heuristics || []).flatMap(h =>
+    (h.issues || []).map(issue => ({ id: h.id, text: issue, severity: h.severity }))
+  );
+  const modal = document.createElement('div');
+  modal.id = 'annot-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;';
+  modal.innerHTML = `
+    <div style="display:flex;align-items:center;gap:1rem;padding:12px 20px;background:#1A1A18;border-bottom:1px solid #333;flex-shrink:0;">
+      <span style="font-family:Instrument Sans,sans-serif;font-size:14px;font-weight:600;color:#fff;">Annotate Screenshot ${currentImgIdx+1} / ${imgDataURLs.length}</span>
+      <div style="display:flex;gap:6px;margin-left:auto;">
+        ${imgDataURLs.length > 1 ? `<button onclick="prevAnnotImg()" style="padding:6px 12px;background:#333;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;">← Prev</button><button onclick="nextAnnotImg()" style="padding:6px 12px;background:#333;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;">Next →</button>` : ''}
+        <button onclick="clearAnnotations()" style="padding:6px 12px;background:#333;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;">Clear</button>
+        <button onclick="saveAnnotations()" style="padding:6px 14px;background:#1A4FBD;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">Save annotations</button>
+        <button onclick="document.getElementById('annot-modal').remove()" style="padding:6px 12px;background:#333;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;">✕ Close</button>
+      </div>
+    </div>
+    <div style="display:flex;flex:1;overflow:hidden;">
+      <div style="flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;" id="annot-canvas-wrap">
+        <canvas id="annot-canvas" style="cursor:crosshair;border-radius:8px;max-width:100%;max-height:100%;"></canvas>
+      </div>
+      <div style="width:260px;background:#1A1A18;border-left:1px solid #333;padding:16px;overflow-y:auto;flex-shrink:0;">
+        <div style="font-family:Instrument Sans,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#666;margin-bottom:12px;">Draw to mark issues</div>
+        <div style="font-family:Instrument Sans,sans-serif;font-size:12px;color:#aaa;margin-bottom:16px;line-height:1.5;">Click and drag on the screenshot to mark problem areas.</div>
+        <div style="font-family:Instrument Sans,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#666;margin-bottom:8px;">Found issues</div>
+        <div id="annot-issues" style="display:flex;flex-direction:column;gap:6px;">
+          ${issues.slice(0,10).map((iss,i) => {
+            const sevColors = ['#6b6b65','#B07D00','#C45A00','#8B2020','#5A0000'];
+            return `<div style="padding:8px;background:#222;border-radius:6px;cursor:pointer;border:1px solid #333;" onclick="selectIssueForAnnotation('${iss.id}','${iss.text.replace(/'/g,'').replace(/"/g,'')}',${iss.severity})" title="${iss.text}">
+              <span style="display:inline-block;background:${sevColors[iss.severity]||sevColors[2]};color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;font-family:DM Mono,monospace;margin-right:5px;">${iss.id}</span>
+              <span style="font-family:Instrument Sans,sans-serif;font-size:11px;color:#ccc;">${iss.text.slice(0,40)}${iss.text.length>40?'…':''}</span>
+            </div>`;
+          }).join('')}
+        </div>
+        <div id="annot-list" style="margin-top:16px;display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  annotationModal = modal;
+  initAnnotCanvas();
+}
+
+let selectedIssue = null;
+function selectIssueForAnnotation(id, text, sev) { selectedIssue = {id, text, sev}; }
+
+function initAnnotCanvas() {
+  annotCanvas = document.getElementById('annot-canvas');
+  annotCtx = annotCanvas.getContext('2d');
+  const img = new Image();
+  img.onload = () => {
+    const wrap = document.getElementById('annot-canvas-wrap');
+    const maxW = wrap.clientWidth - 40, maxH = wrap.clientHeight - 40;
+    const scale = Math.min(maxW / img.width, maxH / img.height, 1);
+    annotCanvas.width = img.width * scale;
+    annotCanvas.height = img.height * scale;
+    annotCanvas._img = img; annotCanvas._scale = scale;
+    redrawAnnotCanvas();
+  };
+  img.src = imgDataURLs[currentImgIdx];
+  annotCanvas.addEventListener('mousedown', onAnnotMousedown);
+  annotCanvas.addEventListener('mousemove', onAnnotMousemove);
+  annotCanvas.addEventListener('mouseup', onAnnotMouseup);
+}
+
+function redrawAnnotCanvas() {
+  annotCtx.clearRect(0, 0, annotCanvas.width, annotCanvas.height);
+  annotCtx.drawImage(annotCanvas._img, 0, 0, annotCanvas.width, annotCanvas.height);
+  const sevColors = ['#6b6b65','#B07D00','#C45A00','#8B2020','#5A0000'];
+  currentAnnotations.filter(a => a.imgIdx === currentImgIdx).forEach((a, i) => {
+    const c = sevColors[a.sev] || sevColors[2];
+    annotCtx.strokeStyle = c; annotCtx.lineWidth = 2.5;
+    annotCtx.strokeRect(a.x, a.y, a.w, a.h);
+    annotCtx.fillStyle = c + 'cc';
+    annotCtx.fillRect(a.x, a.y, 24, 20);
+    annotCtx.fillStyle = '#fff'; annotCtx.font = 'bold 10px DM Mono, monospace';
+    annotCtx.fillText(a.label, a.x + 4, a.y + 13);
+  });
+}
+
+function onAnnotMousedown(e) {
+  const r = annotCanvas.getBoundingClientRect();
+  startX = e.clientX - r.left; startY = e.clientY - r.top; isDrawing = true;
+}
+function onAnnotMousemove(e) {
+  if (!isDrawing) return;
+  const r = annotCanvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  redrawAnnotCanvas();
+  annotCtx.strokeStyle = selectedIssue ? ['#6b6b65','#B07D00','#C45A00','#8B2020','#5A0000'][selectedIssue.sev] : '#8B2020';
+  annotCtx.lineWidth = 2; annotCtx.setLineDash([5,3]);
+  annotCtx.strokeRect(startX, startY, x - startX, y - startY);
+  annotCtx.setLineDash([]);
+}
+function onAnnotMouseup(e) {
+  if (!isDrawing) return; isDrawing = false;
+  const r = annotCanvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  const w = x - startX, h = y - startY;
+  if (Math.abs(w) < 10 || Math.abs(h) < 10) return;
+  const label = selectedIssue ? selectedIssue.id : ('A' + (currentAnnotations.length + 1));
+  const sev = selectedIssue ? selectedIssue.sev : 3;
+  const text = selectedIssue ? selectedIssue.text : 'Issue ' + (currentAnnotations.length + 1);
+  currentAnnotations.push({ imgIdx: currentImgIdx, x: Math.min(startX,x), y: Math.min(startY,y), w: Math.abs(w), h: Math.abs(h), label, sev, text });
+  selectedIssue = null;
+  redrawAnnotCanvas();
+  updateAnnotList();
+}
+
+function updateAnnotList() {
+  const list = document.getElementById('annot-list');
+  if (!list) return;
+  const sevColors = ['#6b6b65','#B07D00','#C45A00','#8B2020','#5A0000'];
+  list.innerHTML = currentAnnotations.filter(a=>a.imgIdx===currentImgIdx).map((a,i)=>`
+    <div style="padding:8px;background:#1a1a18;border:1px solid #333;border-radius:6px;display:flex;align-items:center;gap:6px;">
+      <span style="background:${sevColors[a.sev]};color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;font-family:DM Mono,monospace;">${a.label}</span>
+      <span style="font-family:Instrument Sans,sans-serif;font-size:11px;color:#ccc;flex:1;">${a.text.slice(0,35)}…</span>
+      <button onclick="removeAnnotation(${i})" style="background:none;border:none;color:#666;cursor:pointer;font-size:12px;">✕</button>
+    </div>`).join('');
+}
+
+function removeAnnotation(i) {
+  const imgAnnots = currentAnnotations.filter(a=>a.imgIdx===currentImgIdx);
+  const target = imgAnnots[i];
+  currentAnnotations = currentAnnotations.filter(a=>a!==target);
+  redrawAnnotCanvas(); updateAnnotList();
+}
+
+function clearAnnotations() { currentAnnotations = currentAnnotations.filter(a=>a.imgIdx!==currentImgIdx); redrawAnnotCanvas(); updateAnnotList(); }
+function prevAnnotImg() { if(currentImgIdx>0){currentImgIdx--;showAnnotationModal();} }
+function nextAnnotImg() { if(currentImgIdx<imgDataURLs.length-1){currentImgIdx++;showAnnotationModal();} }
+
+function saveAnnotations() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const studyId = params.get('studyId');
+    if (studyId) {
+      const studies = JSON.parse(localStorage.getItem('uxap_studies') || '[]');
+      const idx = studies.findIndex(s => s.id === studyId);
+      if (idx >= 0) { studies[idx].annotations = currentAnnotations; localStorage.setItem('uxap_studies', JSON.stringify(studies)); }
+    }
+  } catch(e) {}
+  document.getElementById('annot-modal').remove();
+  renderAnnotatedScreenshots();
+}
+
+function renderAnnotatedScreenshots() {
+  const grids = document.querySelectorAll('.screenshot-grid');
+  grids.forEach(grid => {
+    const wraps = grid.querySelectorAll('.screenshot-wrap');
+    wraps.forEach((wrap, idx) => {
+      const frame = wrap.querySelector('.screenshot-frame');
+      if (!frame) return;
+      const annots = currentAnnotations.filter(a => a.imgIdx === idx);
+      let svg = frame.querySelector('.annot-svg');
+      if (!svg) { svg = document.createElementNS('http://www.w3.org/2000/svg','svg'); svg.className='annot-svg'; svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;'; frame.appendChild(svg); }
+      const img = frame.querySelector('img');
+      const scaleX = img.clientWidth / 1024, scaleY = img.clientHeight / (1024 * img.clientHeight / img.clientWidth);
+      const sevColors = ['#6b6b65','#B07D00','#C45A00','#8B2020','#5A0000'];
+      svg.innerHTML = annots.map(a => {
+        const c = sevColors[a.sev]||sevColors[2];
+        return `<rect x="${a.x*scaleX}" y="${a.y*scaleY}" width="${a.w*scaleX}" height="${a.h*scaleY}" fill="none" stroke="${c}" stroke-width="2.5" rx="3"/>
+        <rect x="${a.x*scaleX}" y="${a.y*scaleY}" width="22" height="18" fill="${c}" rx="3"/>
+        <text x="${a.x*scaleX+4}" y="${a.y*scaleY+12}" fill="white" font-size="9" font-weight="700" font-family="DM Mono,monospace">${a.label}</text>`;
+      }).join('');
+    });
+  });
+}
+
+// ── Study history ──────────────────────────────────────────
+function saveStudyToHistory(result) {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const studyId = params.get('studyId') || ('study_' + Date.now());
+    const methodology = params.get('methodology') || 'heuristic-evaluation';
+    const methodologyNames = {
+      'heuristic-evaluation':'Heuristic Evaluation','accessibility-review':'Accessibility Review',
+      'cognitive-walkthrough':'Cognitive Walkthrough','expert-review':'Expert Review',
+      'usability-testing':'Usability Testing','user-interview':'User Interview Analysis',
+      'journey-review':'Journey Map Review','ux-audit':'UX Audit'
+    };
+    const desc = document.getElementById('desc')?.value?.trim() || '';
+    const existing = JSON.parse(localStorage.getItem('uxap_studies') || '[]');
+    const idx = existing.findIndex(s => s.id === studyId);
+    const study = {
+      id: studyId,
+      title: desc || (methodologyNames[methodology] || 'UX Study') + ' — ' + new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+      methodology, methodologyName: methodologyNames[methodology] || 'UX Audit',
+      status: 'completed',
+      createdAt: idx >= 0 ? existing[idx].createdAt : new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      screenshots: imgDataURLs,
+      result, annotations: []
+    };
+    if (idx >= 0) existing[idx] = study; else existing.unshift(study);
+    localStorage.setItem('uxap_studies', JSON.stringify(existing));
+  } catch(e) { console.warn('Could not save study to history', e); }
+}
 
 // ── Credit system ──────────────────────────────────────────
 const FREE_CREDITS = 1;
