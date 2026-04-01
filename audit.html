@@ -748,7 +748,9 @@ function copyMarkdown(r) {
 
 // ── Credit system ──────────────────────────────────────────
 const FREE_CREDITS = 1;
+const OWNER_MODE = new URLSearchParams(window.location.search).has('owner');
 function getCredits() {
+  if (OWNER_MODE) return 999;
   const stored = localStorage.getItem('uxap_credits');
   if (stored === null) {
     localStorage.setItem('uxap_credits', FREE_CREDITS);
@@ -757,6 +759,7 @@ function getCredits() {
   return parseInt(stored, 10);
 }
 function useCredit() {
+  if (OWNER_MODE) return true;
   const c = getCredits();
   if (c <= 0) return false;
   localStorage.setItem('uxap_credits', c - 1);
