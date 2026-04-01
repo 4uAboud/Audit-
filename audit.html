@@ -470,18 +470,18 @@ ${selAList.map(a=>a.name).join(', ')}
 COMPETITORS FOR BENCHMARKING: ${compList.map(c=>c.name+(c.url?` (${c.url})`:'')).join(', ')||'none specified'}
 BENCHMARK DIMENSIONS: ${selDList.join(', ')}
 
-Return ONLY valid JSON, no markdown fences, no explanation:
+Return ONLY valid JSON, no markdown, no explanation. Be concise — short strings only:
 {
   "overall_score": <0-100>,
   "severity_label": "<Critical|Major|Moderate|Minor|Good>",
-  "summary": "<3-sentence executive summary>",
+  "summary": "<2-sentence summary>",
   "heuristics": [
     {
       "id": "H1",
       "name": "...",
       "score": <0-10>,
       "severity": <0-4>,
-      "finding": "<sharp one-sentence finding>",
+      "finding": "<one-sentence finding>",
       "issues": ["<issue 1>","<issue 2>"],
       "recommendations": ["<rec 1>","<rec 2>"],
       "positives": ["<positive 1>"]
@@ -489,27 +489,27 @@ Return ONLY valid JSON, no markdown fences, no explanation:
   ],
   "accessibility": [
     {
-      "category": "<category name>",
+      "category": "<name>",
       "wcag_ref": "<e.g. WCAG 1.4.3>",
       "status": "<pass|warn|fail>",
-      "finding": "<finding>"
+      "finding": "<brief finding>"
     }
   ],
   "a11y_score": <0-100>,
   "benchmark": {
     "products": [
       {
-        "name": "<product name>",
+        "name": "<product>",
         "scores": { "<dim>": <0-10> },
-        "strengths": ["<s1>","<s2>"],
-        "weaknesses": ["<w1>","<w2>"]
+        "strengths": ["<s1>"],
+        "weaknesses": ["<w1>"]
       }
     ],
-    "insights": ["<insight 1>","<insight 2>","<insight 3>"],
-    "recommendation": "<strategic recommendation>"
+    "insights": ["<insight 1>","<insight 2>"],
+    "recommendation": "<one sentence>"
   },
-  "top_priorities": ["<priority 1>","<priority 2>","<priority 3>","<priority 4>"],
-  "quick_wins": ["<win 1>","<win 2>","<win 3>"]
+  "top_priorities": ["<p1>","<p2>","<p3>"],
+  "quick_wins": ["<w1>","<w2>"]
 }`;
 
   blocks.push({type:'text',text:prompt});
@@ -521,7 +521,7 @@ Return ONLY valid JSON, no markdown fences, no explanation:
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-5',
-        max_tokens:2000,
+        max_tokens:3000,
         messages:[{role:'user',content:blocks}]
       })
     });
