@@ -450,7 +450,7 @@ async function runAudit() {
   let blocks = [];
   for(const f of imgFiles) {
     const b64 = await toBase64(f);
-    blocks.push({type:'image',source:{type:'base64',media_type:f.type||'image/jpeg',data:b64}});
+    blocks.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}});
   }
 
   const prompt = `You are a senior UX researcher. Conduct a comprehensive professional evaluation.
