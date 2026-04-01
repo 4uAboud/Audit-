@@ -314,7 +314,7 @@ const DIMS = [
 let selH = new Set(HEURISTICS.map((_,i)=>i));
 let selA = new Set([0,1,2,3,4,5,6,8,9]);
 let selD = new Set([0,1,3,4,5,6,7]);
-let imgFiles = [], refFiles = [], comps = [];
+let imgFiles = [], refFiles = [], comps = [], imgDataURLs = [];
 
 function buildChips(items, containerId, selSet) {
   const el = document.getElementById(containerId);
@@ -396,7 +396,8 @@ async function toBase64(file) {
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', 0.75).split(',')[1]);
+        const dataURL = canvas.toDataURL('image/jpeg', 0.75);
+        resolve({ b64: dataURL.split(',')[1], dataURL });
       };
       img.src = e.target.result;
     };
@@ -447,9 +448,11 @@ async function runAudit() {
   const ptype = document.getElementById('ptype').value || 'web application';
   const users = document.getElementById('users').value.trim();
 
+  imgDataURLs = [];
   let blocks = [];
   for(const f of imgFiles) {
-    const b64 = await toBase64(f);
+    const {b64, dataURL} = await toBase64(f);
+    imgDataURLs.push(dataURL);
     blocks.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}});
   }
 
@@ -611,7 +614,41 @@ function renderResults(r, dims, compList) {
   const quickWins = (r.quick_wins||[]).map((w,i)=>`
     <div class="rec-item"><span class="rec-n">Q${i+1}</span><span>${w}</span></div>`).join('');
 
-  document.getElementById('results-area').innerHTML = `
+  // Hide credit bar in results view
+  const creditBar = document.getElementById('credit-bar');
+  if (creditBar) creditBar.style.display = 'none';
+
+  // Build annotated screenshots section
+  const sevColors = ['#6b6b65','#B07D00','#C45A00','#8B2020','#5A0000'];
+  const worstSev = Math.max(0, ...(r.heuristics||[]).map(h=>h.severity||0));
+  const borderColor = sevColors[worstSev] || sevColors[0];
+  const critIssues = (r.heuristics||[])
+    .filter(h=>h.severity>=2)
+    .flatMap(h=>(h.issues||[]).slice(0,1).map(issue=>({label:`${h.id}`,issue,sev:h.severity})));
+
+  const screenshotsHtml = imgDataURLs.length ? `
+    <div class="result-section">
+      <div class="result-section-title">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><circle cx="4.5" cy="4.5" r="1" stroke="currentColor" stroke-width="1"/><path d="M1 9l3-3 3 2.5 2-2 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Submitted screenshots
+      </div>
+      <div class="screenshot-grid">
+        ${imgDataURLs.map((url, idx) => `
+          <div class="screenshot-wrap">
+            <div class="screenshot-frame" style="border-color:${borderColor};">
+              <img src="${url}" class="screenshot-img" alt="Screenshot ${idx+1}">
+              <div class="screenshot-badges">
+                ${critIssues.slice(0, 5).map((ci,i)=>`<span class="s-badge" style="background:${sevColors[ci.sev]||sevColors[2]};" title="${ci.issue}">${ci.label}</span>`).join('')}
+              </div>
+            </div>
+            <div class="screenshot-issues">
+              ${critIssues.slice(0,4).map(ci=>`<div class="s-issue-row"><span class="s-badge-sm" style="background:${sevColors[ci.sev]};">${ci.label}</span><span>${ci.issue}</span></div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('results-area').innerHTML = screenshotsHtml + `
     <div class="metric-grid">
       <div class="metric-card"><div class="metric-card-label">Overall UX</div><div class="metric-card-val" style="color:${oc};">${r.overall_score}</div><div class="metric-card-sub">${r.severity_label||''}</div></div>
       <div class="metric-card"><div class="metric-card-label">Accessibility</div><div class="metric-card-val" style="color:${ac};">${r.a11y_score||'—'}</div><div class="metric-card-sub">WCAG score</div></div>
@@ -681,10 +718,31 @@ function toggleH(head) {
 
 function exportReport(r) {
   if(!r) return;
+  const sevColors = ['#6b6b65','#B07D00','#C45A00','#8B2020','#5A0000'];
+  const worstSev = Math.max(0,...(r.heuristics||[]).map(h=>h.severity||0));
+  const borderColor = sevColors[worstSev]||sevColors[0];
+  const critIssues = (r.heuristics||[]).filter(h=>h.severity>=2).flatMap(h=>(h.issues||[]).slice(0,1).map(issue=>({label:h.id,issue,sev:h.severity})));
+  const screenshotsSection = imgDataURLs.length ? `
+<h2>Submitted Screenshots</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem;">
+${imgDataURLs.map((url,i)=>`
+  <div>
+    <div style="position:relative;border:2.5px solid ${borderColor};border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1);">
+      <img src="${url}" style="display:block;width:100%;height:auto;" alt="Screenshot ${i+1}">
+      <div style="position:absolute;top:8px;left:8px;display:flex;flex-wrap:wrap;gap:4px;">
+        ${critIssues.slice(0,5).map(ci=>`<span style="background:${sevColors[ci.sev]};color:#fff;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;font-family:monospace;box-shadow:0 1px 4px rgba(0,0,0,.25);" title="${ci.issue}">${ci.label}</span>`).join('')}
+      </div>
+    </div>
+    <div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;">
+      ${critIssues.slice(0,4).map(ci=>`<div style="display:flex;align-items:flex-start;gap:6px;font-size:12px;color:#444;"><span style="background:${sevColors[ci.sev]};color:#fff;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;font-family:monospace;flex-shrink:0;margin-top:2px;">${ci.label}</span><span>${ci.issue}</span></div>`).join('')}
+    </div>
+  </div>`).join('')}
+</div>` : '';
+
   const html = `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>UX Audit Report</title>
 <style>
-body{font-family:Georgia,serif;max-width:800px;margin:40px auto;padding:0 24px;color:#1a1a18;line-height:1.7;}
+body{font-family:Georgia,serif;max-width:860px;margin:40px auto;padding:0 24px;color:#1a1a18;line-height:1.7;}
 h1,h2,h3{font-family:Georgia,serif;}
 h1{font-size:2rem;margin-bottom:.5rem;}
 h2{font-size:1.4rem;margin:2rem 0 .75rem;border-bottom:1px solid #e0e0d8;padding-bottom:.5rem;}
@@ -698,7 +756,6 @@ td{padding:8px 12px;border-bottom:1px solid #e0e0d8;}
 .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.8rem;margin:2px;}
 .issue{background:#fdeaea;color:#8b2020;}
 .good{background:#e8f5ee;color:#1a6b3a;}
-.rec{background:#eef3ff;color:#1a3a8a;}
 @media print{body{margin:0;}}
 </style></head><body>
 <h1>UX Audit Report</h1>
@@ -708,6 +765,7 @@ td{padding:8px 12px;border-bottom:1px solid #e0e0d8;}
   <div><div style="font-size:.8rem;color:#6b6b65;text-transform:uppercase;letter-spacing:.06em;">Accessibility Score</div><div class="score" style="color:#1A6B3A;">${r.a11y_score||'—'}</div></div>
 </div>
 <div class="summary">${r.summary||''}</div>
+${screenshotsSection}
 <h2>Heuristic Evaluation</h2>
 ${(r.heuristics||[]).map(h=>`
 <h3>${h.id} — ${h.name} <span style="font-size:.9rem;color:#6b6b65;">(${h.score}/10 · ${['None','Minor','Moderate','Major','Critical'][h.severity]||''})</span></h3>
