@@ -1,15 +1,10 @@
-const https = require('https');
-
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const send = (status, obj) => {
-    res.statusCode = status;
-    res.end(JSON.stringify(obj));
-  };
+  const send = (status, obj) => { res.statusCode = status; res.end(JSON.stringify(obj)); };
 
   try {
     if (req.method === 'OPTIONS') { res.statusCode = 200; res.end('{}'); return; }
@@ -18,7 +13,6 @@ module.exports = async function handler(req, res) {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) { send(500, { error: 'API key not configured.' }); return; }
 
-    // Read body manually — req.body may be undefined for large payloads
     let bodyStr;
     if (req.body && typeof req.body === 'object') {
       bodyStr = JSON.stringify(req.body);
@@ -33,34 +27,32 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    const result = await new Promise((resolve, reject) => {
-      const buf = Buffer.from(bodyStr, 'utf8');
-      const options = {
-        hostname: 'api.anthropic.com',
-        path: '/v1/messages',
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 55000);
+
+    let response;
+    try {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'Content-Length': buf.length
-        }
-      };
-      const request = https.request(options, (response) => {
-        let raw = '';
-        response.on('data', chunk => { raw += chunk; });
-        response.on('end', () => {
-          try { resolve({ status: response.statusCode, data: JSON.parse(raw) }); }
-          catch (e) { reject(new Error('Anthropic non-JSON: ' + raw.slice(0, 300))); }
-        });
+          'anthropic-version': '2023-06-01'
+        },
+        body: bodyStr,
+        signal: controller.signal
       });
-      request.on('error', reject);
-      request.write(buf);
-      request.end();
-    });
+    } finally {
+      clearTimeout(timer);
+    }
 
-    send(result.status, result.data);
+    const text = await response.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch (e) { send(500, { error: 'Anthropic non-JSON: ' + text.slice(0, 200) }); return; }
+
+    send(response.status, data);
   } catch (err) {
-    send(500, { error: err.message || 'Unknown error' });
+    send(500, { error: err.name === 'AbortError' ? 'Request timed out — try reducing image count or try again.' : err.message });
   }
 };
