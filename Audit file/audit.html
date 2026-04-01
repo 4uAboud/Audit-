@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Audit — UX Audit Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><div class="logo-grid"><div></div><div></div><div></div><div></div></div></div>
+      <span class="logo-name">UX Audit Pro</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="audit.html" class="nav-link active">Start Audit</a>
+      <a href="how.html" class="nav-link">How it works</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+    </div>
+    <a href="audit.html" class="btn-nav">New audit</a>
+    <button class="nav-toggle" onclick="document.getElementById('nm').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="nm">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="audit.html" class="nav-link active">Start Audit</a>
+    <a href="how.html" class="nav-link">How it works</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <span class="page-header-eyebrow">UX Evaluation</span>
+    <h1>Start your audit</h1>
+    <p>Upload your designs, configure your evaluation, and get a full AI-powered UX report.</p>
+  </div>
+</div>
+
+<div class="audit-wrap">
+  <div class="container">
+    <!-- Credit bar (full width, above layout) -->
+    <div class="credit-bar" id="credit-bar">
+      <div class="credit-bar-left">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="9" rx="2" stroke="#1A4FBD" stroke-width="1.2"/><path d="M1 7h14" stroke="#1A4FBD" stroke-width="1.2"/></svg>
+        <div class="credit-count">Credits remaining: <span id="credit-display">1</span></div>
+      </div>
+      <button class="credit-bar-btn" onclick="window.location.href='pricing.html'">Buy more credits</button>
+    </div>
+
+    <!-- Paywall (full width, shown when credits = 0) -->
+    <div class="paywall" id="paywall">
+      <div class="paywall-icon">⚡</div>
+      <h3>You've used your free audit</h3>
+      <p>Buy a credit pack to run more audits. Credits never expire — use them whenever you need.</p>
+      <div class="paywall-packs">
+        <div class="paywall-pack" onclick="window.location.href='pricing.html#starter'">
+          <div class="paywall-pack-price">$9</div>
+          <div class="paywall-pack-desc">5 audits</div>
+        </div>
+        <div class="paywall-pack best" onclick="window.location.href='pricing.html#professional'">
+          <div class="paywall-pack-price">$29</div>
+          <div class="paywall-pack-desc">20 audits</div>
+          <div class="paywall-pack-save">Save 20%</div>
+        </div>
+        <div class="paywall-pack" onclick="window.location.href='pricing.html#agency'">
+          <div class="paywall-pack-price">$99</div>
+          <div class="paywall-pack-desc">100 audits</div>
+          <div class="paywall-pack-save">Save 45%</div>
+        </div>
+      </div>
+      <a href="pricing.html" class="btn-primary">View all plans →</a>
+    </div>
+
+    <div class="audit-layout" id="audit-main-layout">
+
+      <!-- Sidebar -->
+      <aside class="audit-sidebar">
+        <div class="sidebar-steps">
+          <div class="sidebar-step active" id="ss1" onclick="goStep(1)">
+            <div class="step-dot">1</div>
+            <span>Upload inputs</span>
+          </div>
+          <div class="sidebar-step" id="ss2" onclick="goStep(2)">
+            <div class="step-dot">2</div>
+            <span>Heuristics</span>
+          </div>
+          <div class="sidebar-step" id="ss3" onclick="goStep(3)">
+            <div class="step-dot">3</div>
+            <span>Accessibility</span>
+          </div>
+          <div class="sidebar-step" id="ss4" onclick="goStep(4)">
+            <div class="step-dot">4</div>
+            <span>Competitors</span>
+          </div>
+          <div class="sidebar-step" id="ss5" onclick="goStep(5)" style="display:none">
+            <div class="step-dot">5</div>
+            <span>Results</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <div>
+
+        <!-- Step 1: Upload -->
+        <div class="audit-panel active" id="p1">
+          <div class="panel-card">
+            <div class="panel-card-title">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M6 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.4"/><circle cx="9" cy="9.5" r="2" stroke="currentColor" stroke-width="1.4"/></svg>
+              Upload your UI
+            </div>
+
+            <div class="field">
+              <label class="field-label">Screenshots & UI images</label>
+              <div class="upload-zone">
+                <input type="file" id="img-input" accept="image/*" multiple onchange="handleImgs(event)">
+                <div class="upload-zone-icon">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.4"/><circle cx="6.5" cy="6.5" r="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 12l4-4 3 3 2-2 5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="upload-zone-title">Drop screenshots here or click to browse</div>
+                <div class="upload-zone-hint">PNG, JPG, WebP — multiple files supported</div>
+              </div>
+              <div class="preview-strip" id="img-prev"></div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Reference files</label>
+              <div class="upload-zone">
+                <input type="file" id="ref-input" multiple accept=".pdf,.txt,.md,.csv,.fig,.sketch" onchange="handleRefs(event)">
+                <div class="upload-zone-icon">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="1" width="12" height="16" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M6 5.5h6M6 8.5h6M6 11.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                </div>
+                <div class="upload-zone-title">Drop reference files or click to browse</div>
+                <div class="upload-zone-hint">PDF, Figma exports, design specs, briefs</div>
+              </div>
+              <div id="ref-prev" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;"></div>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-card-title">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v3l2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              Product context
+            </div>
+            <div class="input-2col">
+              <div class="field">
+                <label class="field-label">Product type</label>
+                <select id="ptype">
+                  <option value="">Select type…</option>
+                  <option>Mobile app</option>
+                  <option>Web application</option>
+                  <option>Dashboard / data tool</option>
+                  <option>E-commerce</option>
+                  <option>SaaS platform</option>
+                  <option>Onboarding flow</option>
+                  <option>Landing page</option>
+                  <option>Settings / admin panel</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label">Target users</label>
+                <input type="text" id="users" placeholder="e.g. enterprise buyers, first-time mobile users…">
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label">Product description</label>
+              <textarea id="desc" placeholder="What does this product do? Who uses it? Any known pain points or specific goals for this audit…"></textarea>
+            </div>
+            <div class="input-2col">
+              <div class="field" style="margin:0">
+                <label class="field-label">Evaluation focus</label>
+                <textarea id="focus" placeholder="e.g. checkout flow, onboarding, navigation…" style="min-height:70px;"></textarea>
+              </div>
+              <div class="field" style="margin:0">
+                <label class="field-label">Business context</label>
+                <textarea id="biz" placeholder="Key goals, upcoming launches, constraints…" style="min-height:70px;"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-run" onclick="goStep(2)">Next: Heuristics →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Heuristics -->
+        <div class="audit-panel" id="p2">
+          <div class="panel-card">
+            <div class="panel-card-title">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
+              Nielsen's 10 Heuristics
+            </div>
+            <p style="font-size:14px;margin-bottom:1.25rem;">Select which heuristics to include in your evaluation. Each will be scored 0–10 with severity ratings and recommendations.</p>
+            <div class="chip-grid" id="h-chips"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-back" onclick="goStep(1)">← Back</button>
+            <button class="btn-run" onclick="goStep(3)">Next: Accessibility →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Accessibility -->
+        <div class="audit-panel" id="p3">
+          <div class="panel-card">
+            <div class="panel-card-title">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="4" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M9 6.5V11M6 8h6M6.5 16l2.5-5 2.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Accessibility checks
+            </div>
+            <p style="font-size:14px;margin-bottom:1.25rem;">Select which WCAG criteria and accessibility areas to evaluate. Each will receive a pass / warn / fail rating with remediation guidance.</p>
+            <div class="chip-grid" id="a11y-chips"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-back" onclick="goStep(2)">← Back</button>
+            <button class="btn-run" onclick="goStep(4)">Next: Competitors →</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Competitors -->
+        <div class="audit-panel" id="p4">
+          <div class="panel-card">
+            <div class="panel-card-title">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="6" cy="9" r="3" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M9 9h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Competitor products
+            </div>
+            <p style="font-size:14px;margin-bottom:1.25rem;">Add competitor products for side-by-side benchmarking. The AI will compare your UX against each one across all selected dimensions.</p>
+            <div id="comp-list"></div>
+            <button class="btn-add-comp" onclick="addComp()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              Add competitor
+            </button>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-card-title">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14l4-5 3 3 3-4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 17h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              Benchmarking dimensions
+            </div>
+            <p style="font-size:14px;margin-bottom:1.25rem;">Select dimensions to score across your product and competitors.</p>
+            <div class="chip-grid" id="dim-chips"></div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-back" onclick="goStep(3)">← Back</button>
+            <button class="btn-run" id="run-btn" onclick="runAudit()">Run full audit</button>
+          </div>
+          <div class="status-row" id="status-row"></div>
+        </div>
+
+        <!-- Step 5: Results -->
+        <div class="audit-panel" id="p5">
+          <div class="results-panel show" id="results-area"></div>
+        </div>
+
+      </div>
+    </div><!-- end audit-layout -->
+  </div><!-- end audit-main-layout -->
+  </div><!-- end container -->
+</div><!-- end audit-wrap -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="logo">
+        <div class="logo-mark"><div class="logo-grid"><div></div><div></div><div></div><div></div></div></div>
+        <span class="logo-name">UX Audit Pro</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="audit.html">Start Audit</a>
+        <a href="how.html">How it works</a>
+      </div>
+      <div class="footer-copy">AI-powered UX evaluation</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const HEURISTICS = [
+  {id:"H1",name:"Visibility of system status"},
+  {id:"H2",name:"Match with real world"},
+  {id:"H3",name:"User control & freedom"},
+  {id:"H4",name:"Consistency & standards"},
+  {id:"H5",name:"Error prevention"},
+  {id:"H6",name:"Recognition over recall"},
+  {id:"H7",name:"Flexibility & efficiency"},
+  {id:"H8",name:"Aesthetic & minimal design"},
+  {id:"H9",name:"Error recognition & recovery"},
+  {id:"H10",name:"Help & documentation"}
+];
+const A11Y = [
+  {id:"PERC",name:"Perceivable (WCAG 1.x)"},
+  {id:"OPER",name:"Operable (WCAG 2.x)"},
+  {id:"UNDE",name:"Understandable (WCAG 3.x)"},
+  {id:"ROBU",name:"Robust (WCAG 4.x)"},
+  {id:"CONT",name:"Color contrast"},
+  {id:"KEYB",name:"Keyboard navigation"},
+  {id:"SCRN",name:"Screen reader support"},
+  {id:"MOTN",name:"Motion & animation"},
+  {id:"FOCU",name:"Focus indicators"},
+  {id:"ALT", name:"Alt text & labels"}
+];
+const DIMS = [
+  "Learnability","Efficiency","Memorability","Error rate","Satisfaction",
+  "Visual clarity","Navigation","Accessibility","Onboarding","Performance feel"
+];
+
+let selH = new Set(HEURISTICS.map((_,i)=>i));
+let selA = new Set([0,1,2,3,4,5,6,8,9]);
+let selD = new Set([0,1,3,4,5,6,7]);
+let imgFiles = [], refFiles = [], comps = [];
+
+function buildChips(items, containerId, selSet) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = items.map((item,i) => `
+    <div class="chip ${selSet.has(i)?'on':''}" onclick="toggleChip(${i},'${containerId}',this)">
+      ${item.id ? `<div class="chip-id">${item.id}</div>` : ''}
+      <div class="chip-name">${item.name||item}</div>
+    </div>`).join('');
+}
+function toggleChip(i, cid, el) {
+  const map = {'h-chips':selH,'a11y-chips':selA,'dim-chips':selD};
+  const s = map[cid]; if(!s) return;
+  s.has(i) ? s.delete(i) : s.add(i);
+  el.classList.toggle('on');
+}
+
+function goStep(n) {
+  for(let i=1;i<=5;i++) {
+    document.getElementById('p'+i).classList.toggle('active', i===n);
+    const ss = document.getElementById('ss'+i);
+    if(ss) {
+      ss.classList.remove('active','done');
+      if(i===n) ss.classList.add('active');
+      else if(i<n) ss.classList.add('done');
+    }
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function handleImgs(e) {
+  imgFiles = [...e.target.files];
+  const prev = document.getElementById('img-prev');
+  prev.innerHTML = '';
+  imgFiles.forEach(f => {
+    const img = document.createElement('img');
+    img.className = 'prev-img'; img.src = URL.createObjectURL(f);
+    prev.appendChild(img);
+  });
+}
+function handleRefs(e) {
+  refFiles = [...e.target.files];
+  const prev = document.getElementById('ref-prev');
+  prev.innerHTML = refFiles.map(f =>
+    `<div class="prev-file">
+      <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><rect x="1" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1"/><path d="M3 4.5h6M3 7h6M3 9.5h4" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/></svg>
+      ${f.name.split('.').pop().toUpperCase()}
+    </div>`
+  ).join('');
+}
+
+function addComp() {
+  comps.push({name:'',url:''});
+  renderComps();
+}
+function removeComp(i) { comps.splice(i,1); renderComps(); }
+function renderComps() {
+  document.getElementById('comp-list').innerHTML = comps.map((c,i) => `
+    <div class="comp-row">
+      <input type="text" placeholder="Product name" value="${c.name}" oninput="comps[${i}].name=this.value" style="max-width:200px;">
+      <input type="text" placeholder="URL or description (optional)" value="${c.url}" oninput="comps[${i}].url=this.value">
+      <button class="btn-remove" onclick="removeComp(${i})">✕</button>
+    </div>`).join('');
+}
+
+async function toBase64(file) {
+  return new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function setStatus(msg, loading) {
+  const el = document.getElementById('status-row');
+  el.innerHTML = loading
+    ? `<div class="spinner"></div><span>${msg}</span>`
+    : `<span>${msg}</span>`;
+}
+
+function scoreColor(s) {
+  if(s>=8) return '#1A6B3A'; if(s>=6) return '#1A4FBD'; if(s>=4) return '#7A4A0A'; return '#8B2020';
+}
+function barColor(s) {
+  if(s>=8) return '#639922'; if(s>=6) return '#4F7AE8'; if(s>=4) return '#EF9F27'; return '#E24B4A';
+}
+function sevDot(sev) { return ['#1A6B3A','#639922','#7A4A0A','#D85A30','#8B2020'][sev]||'#999'; }
+function sevLabel(sev) { return ['None','Minor','Moderate','Major','Critical'][sev]||''; }
+function sevPillStyle(sev) {
+  const bg = [null,'#E8F5EE',null,'#FDF3E0',null,'#FDEAEA'][sev]||'#F2F2ED';
+  const c  = [null,'#1A6B3A',null,'#7A4A0A',null,'#8B2020'][sev]||'#6B6B65';
+  return `background:${bg};color:${c};`;
+}
+
+async function runAudit() {
+  const selHList = HEURISTICS.filter((_,i)=>selH.has(i));
+  const selAList = A11Y.filter((_,i)=>selA.has(i));
+  const selDList = DIMS.filter((_,i)=>selD.has(i));
+  const compList = comps.filter(c=>c.name.trim());
+  if(!selHList.length) { alert('Select at least one heuristic.'); return; }
+
+  // Check credits first
+  if (getCredits() <= 0) {
+    document.getElementById('paywall').classList.add('show');
+    document.getElementById('audit-main-layout').style.display = 'none';
+    return;
+  }
+  document.getElementById('run-btn').disabled = true;
+  setStatus('Preparing analysis…', true);
+
+  const desc = document.getElementById('desc').value.trim();
+  const focus = document.getElementById('focus').value.trim();
+  const biz = document.getElementById('biz').value.trim();
+  const ptype = document.getElementById('ptype').value || 'web application';
+  const users = document.getElementById('users').value.trim();
+
+  let blocks = [];
+  for(const f of imgFiles) {
+    const b64 = await toBase64(f);
+    blocks.push({type:'image',source:{type:'base64',media_type:f.type||'image/jpeg',data:b64}});
+  }
+
+  const prompt = `You are a senior UX researcher. Conduct a comprehensive professional evaluation.
+
+PRODUCT: ${ptype}
+DESCRIPTION: ${desc||'not provided'}
+TARGET USERS: ${users||'general users'}
+FOCUS: ${focus||'overall UX quality'}
+BUSINESS CONTEXT: ${biz||'not provided'}
+
+HEURISTICS TO EVALUATE:
+${selHList.map(h=>`${h.id}: ${h.name}`).join('\n')}
+
+ACCESSIBILITY AREAS:
+${selAList.map(a=>a.name).join(', ')}
+
+COMPETITORS FOR BENCHMARKING: ${compList.map(c=>c.name+(c.url?` (${c.url})`:'')).join(', ')||'none specified'}
+BENCHMARK DIMENSIONS: ${selDList.join(', ')}
+
+Return ONLY valid JSON, no markdown fences, no explanation:
+{
+  "overall_score": <0-100>,
+  "severity_label": "<Critical|Major|Moderate|Minor|Good>",
+  "summary": "<3-sentence executive summary>",
+  "heuristics": [
+    {
+      "id": "H1",
+      "name": "...",
+      "score": <0-10>,
+      "severity": <0-4>,
+      "finding": "<sharp one-sentence finding>",
+      "issues": ["<issue 1>","<issue 2>"],
+      "recommendations": ["<rec 1>","<rec 2>"],
+      "positives": ["<positive 1>"]
+    }
+  ],
+  "accessibility": [
+    {
+      "category": "<category name>",
+      "wcag_ref": "<e.g. WCAG 1.4.3>",
+      "status": "<pass|warn|fail>",
+      "finding": "<finding>"
+    }
+  ],
+  "a11y_score": <0-100>,
+  "benchmark": {
+    "products": [
+      {
+        "name": "<product name>",
+        "scores": { "<dim>": <0-10> },
+        "strengths": ["<s1>","<s2>"],
+        "weaknesses": ["<w1>","<w2>"]
+      }
+    ],
+    "insights": ["<insight 1>","<insight 2>","<insight 3>"],
+    "recommendation": "<strategic recommendation>"
+  },
+  "top_priorities": ["<priority 1>","<priority 2>","<priority 3>","<priority 4>"],
+  "quick_wins": ["<win 1>","<win 2>","<win 3>"]
+}`;
+
+  blocks.push({type:'text',text:prompt});
+  setStatus('Running AI analysis — heuristics, accessibility, benchmarking…', true);
+
+  try {
+    const res = await fetch('/api/analyze', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:4000,
+        messages:[{role:'user',content:blocks}]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content.map(b=>b.text||'').join('');
+    const result = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    setStatus('Analysis complete.', false);
+    document.getElementById('ss5').style.display = '';
+    useCredit();
+    renderResults(result, selDList, compList);
+    goStep(5);
+  } catch(err) {
+    setStatus('Error: ' + (err.message||'Analysis failed. Please try again.'), false);
+    document.getElementById('run-btn').disabled = false;
+  }
+}
+
+function renderResults(r, dims, compList) {
+  const oc = scoreColor(r.overall_score/10);
+  const ac = scoreColor((r.a11y_score||0)/10);
+  const critCount = (r.heuristics||[]).filter(h=>h.severity>=3).length;
+
+  // Heuristics
+  const hHtml = (r.heuristics||[]).map((h,i) => {
+    const dc = sevDot(h.severity);
+    const ps = sevPillStyle(h.severity);
+    const issues = (h.issues||[]).map(x=>`<span class="tag tag-issue">${x}</span>`).join('');
+    const pos = (h.positives||[]).map(x=>`<span class="tag tag-good">+ ${x}</span>`).join('');
+    const recs = (h.recommendations||[]).map((x,j)=>`<div class="rec-item"><span class="rec-n">R${j+1}</span><span>${x}</span></div>`).join('');
+    return `<div class="h-item">
+      <div class="h-item-head" onclick="toggleH(this)">
+        <div class="sev-dot" style="background:${dc};"></div>
+        <div class="h-name">${h.id} — ${h.name}</div>
+        <span class="score-pill" style="${ps}">${h.score}/10</span>
+        <span class="sev-pill" style="${ps}">${sevLabel(h.severity)}</span>
+        <span class="caret">▾</span>
+      </div>
+      <div class="h-item-body">
+        <div class="h-finding">${h.finding||''}</div>
+        ${issues||pos ? `<div class="tag-row">${issues}${pos}</div>` : ''}
+        ${recs ? `<div class="rec-list">${recs}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Accessibility
+  const a11yHtml = (r.accessibility||[]).map(a => {
+    const dotC = a.status==='pass'?'#1A6B3A':a.status==='warn'?'#7A4A0A':'#8B2020';
+    const statusLabel = a.status==='pass'?'Pass':a.status==='warn'?'Warning':'Fail';
+    const statusStyle = a.status==='pass'?'background:#E8F5EE;color:#1A6B3A;':a.status==='warn'?'background:#FDF3E0;color:#7A4A0A;':'background:#FDEAEA;color:#8B2020;';
+    return `<div class="a11y-card">
+      <div class="a11y-cat">${a.wcag_ref||''}</div>
+      <div class="a11y-top">
+        <div class="sev-dot" style="background:${dotC};"></div>
+        <div class="a11y-name">${a.category}</div>
+        <span class="sev-pill" style="${statusStyle};margin-left:auto;">${statusLabel}</span>
+      </div>
+      <div class="a11y-note">${a.finding||''}</div>
+    </div>`;
+  }).join('');
+
+  // Benchmark
+  const bench = r.benchmark||{};
+  const products = bench.products||[];
+  const useDims = dims.length ? dims : Object.keys((products[0]||{}).scores||{});
+  const benchHead = ['Product',...useDims,'Strengths','Weaknesses'].map(d=>`<th>${d}</th>`).join('');
+  const benchRows = products.map(p => {
+    const dCells = useDims.map(d => {
+      const v = (p.scores||{})[d];
+      const n = typeof v==='number'?v:null;
+      const c = n!==null?barColor(n):'#ccc';
+      return `<td>
+        ${n!==null?`<span class="bench-num" style="color:${scoreColor(n)};">${n}</span>
+        <div class="bar-mini"><div class="bar-mini-fill" style="width:${Math.round(n*10)}%;background:${c};"></div></div>`:'—'}
+      </td>`;
+    }).join('');
+    const str = (p.strengths||[]).slice(0,2).map(s=>`<div style="font-size:11px;color:#1A6B3A;margin-bottom:2px;">+ ${s}</div>`).join('');
+    const wk = (p.weaknesses||[]).slice(0,2).map(s=>`<div style="font-size:11px;color:#8B2020;margin-bottom:2px;">- ${s}</div>`).join('');
+    return `<tr><td style="font-weight:600;white-space:nowrap;">${p.name}</td>${dCells}<td>${str}</td><td>${wk}</td></tr>`;
+  }).join('');
+
+  const insights = (bench.insights||[]).map(ins=>`<div class="insight-item">${ins}</div>`).join('');
+  const priorities = (r.top_priorities||[]).map((p,i)=>`
+    <div class="priority-item"><div class="priority-num">${i+1}</div><div class="priority-text">${p}</div></div>`).join('');
+  const quickWins = (r.quick_wins||[]).map((w,i)=>`
+    <div class="rec-item"><span class="rec-n">Q${i+1}</span><span>${w}</span></div>`).join('');
+
+  document.getElementById('results-area').innerHTML = `
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-card-label">Overall UX</div><div class="metric-card-val" style="color:${oc};">${r.overall_score}</div><div class="metric-card-sub">${r.severity_label||''}</div></div>
+      <div class="metric-card"><div class="metric-card-label">Accessibility</div><div class="metric-card-val" style="color:${ac};">${r.a11y_score||'—'}</div><div class="metric-card-sub">WCAG score</div></div>
+      <div class="metric-card"><div class="metric-card-label">Heuristics</div><div class="metric-card-val">${(r.heuristics||[]).length}</div><div class="metric-card-sub">evaluated</div></div>
+      <div class="metric-card"><div class="metric-card-label">Critical issues</div><div class="metric-card-val" style="color:${critCount>0?'#8B2020':'#1A6B3A'};">${critCount}</div><div class="metric-card-sub">severity 3–4</div></div>
+    </div>
+
+    <div class="summary-box">${r.summary||''}</div>
+
+    <div class="result-section">
+      <div class="result-section-title">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+        Heuristic evaluation
+      </div>
+      <div class="h-list">${hHtml}</div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="3" r="1.2" stroke="currentColor" stroke-width="1.2"/><path d="M7 5v4M5 7h4M5 13l2-4 2 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Accessibility audit
+      </div>
+      <div class="a11y-grid">${a11yHtml}</div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10l3-3.5 3 3 3-5 2 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Competitive benchmarking
+      </div>
+      ${products.length ? `<div class="bench-wrap"><table class="bench-table"><thead><tr>${benchHead}</tr></thead><tbody>${benchRows}</tbody></table></div>` : '<p style="font-size:14px;color:var(--ink-4);">No competitors specified — add competitors in step 4 to see benchmarking.</p>'}
+      ${insights ? `<div class="insight-list" style="margin-top:1rem;">${insights}</div>` : ''}
+      ${bench.recommendation ? `<div class="strat-box"><div class="strat-label">Strategic recommendation</div>${bench.recommendation}</div>` : ''}
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Priorities & quick wins
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-4);margin-bottom:.75rem;">Top priorities</div>
+          <div class="priority-list">${priorities}</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-4);margin-bottom:.75rem;">Quick wins</div>
+          <div class="rec-list">${quickWins}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-actions">
+      <button class="btn-export primary" onclick="exportReport(window._lastResult)">Download report (HTML)</button>
+      <button class="btn-export" onclick="copyMarkdown(window._lastResult)">Copy as Markdown</button>
+      <button class="btn-export" onclick="window.print()">Print / PDF</button>
+    </div>`;
+
+  window._lastResult = r;
+}
+
+function toggleH(head) {
+  head.nextElementSibling.classList.toggle('open');
+  const c = head.querySelector('.caret');
+  if(c) c.style.transform = head.nextElementSibling.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function exportReport(r) {
+  if(!r) return;
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>UX Audit Report</title>
+<style>
+body{font-family:Georgia,serif;max-width:800px;margin:40px auto;padding:0 24px;color:#1a1a18;line-height:1.7;}
+h1,h2,h3{font-family:Georgia,serif;}
+h1{font-size:2rem;margin-bottom:.5rem;}
+h2{font-size:1.4rem;margin:2rem 0 .75rem;border-bottom:1px solid #e0e0d8;padding-bottom:.5rem;}
+h3{font-size:1.1rem;margin:1.25rem 0 .4rem;}
+.meta{color:#6b6b65;font-size:.9rem;margin-bottom:2rem;}
+.score{font-size:3rem;font-weight:700;color:#1A4FBD;}
+.summary{background:#eef3ff;padding:1rem 1.25rem;border-radius:8px;font-size:.95rem;margin:1rem 0 2rem;}
+table{width:100%;border-collapse:collapse;font-size:.9rem;margin:1rem 0;}
+th{background:#f2f2ed;padding:8px 12px;text-align:left;border-bottom:2px solid #e0e0d8;}
+td{padding:8px 12px;border-bottom:1px solid #e0e0d8;}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.8rem;margin:2px;}
+.issue{background:#fdeaea;color:#8b2020;}
+.good{background:#e8f5ee;color:#1a6b3a;}
+.rec{background:#eef3ff;color:#1a3a8a;}
+@media print{body{margin:0;}}
+</style></head><body>
+<h1>UX Audit Report</h1>
+<div class="meta">Generated by UX Audit Pro · ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</div>
+<div style="display:flex;gap:2rem;margin-bottom:1rem;">
+  <div><div style="font-size:.8rem;color:#6b6b65;text-transform:uppercase;letter-spacing:.06em;">Overall UX Score</div><div class="score">${r.overall_score}</div><div style="color:#6b6b65;">${r.severity_label||''}</div></div>
+  <div><div style="font-size:.8rem;color:#6b6b65;text-transform:uppercase;letter-spacing:.06em;">Accessibility Score</div><div class="score" style="color:#1A6B3A;">${r.a11y_score||'—'}</div></div>
+</div>
+<div class="summary">${r.summary||''}</div>
+<h2>Heuristic Evaluation</h2>
+${(r.heuristics||[]).map(h=>`
+<h3>${h.id} — ${h.name} <span style="font-size:.9rem;color:#6b6b65;">(${h.score}/10 · ${['None','Minor','Moderate','Major','Critical'][h.severity]||''})</span></h3>
+<p>${h.finding||''}</p>
+${h.issues?.length?`<p><strong>Issues:</strong> ${h.issues.map(i=>`<span class="tag issue">${i}</span>`).join(' ')}</p>`:''}
+${h.recommendations?.length?`<p><strong>Recommendations:</strong></p><ul>${h.recommendations.map(r=>`<li>${r}</li>`).join('')}</ul>`:''}
+`).join('')}
+<h2>Accessibility Audit</h2>
+<table><thead><tr><th>Category</th><th>WCAG Ref</th><th>Status</th><th>Finding</th></tr></thead><tbody>
+${(r.accessibility||[]).map(a=>`<tr><td>${a.category}</td><td>${a.wcag_ref||'—'}</td><td>${a.status}</td><td>${a.finding||''}</td></tr>`).join('')}
+</tbody></table>
+${r.benchmark?.products?.length?`
+<h2>Competitive Benchmarking</h2>
+<table><thead><tr><th>Product</th>${Object.keys(r.benchmark.products[0].scores||{}).map(d=>`<th>${d}</th>`).join('')}<th>Strengths</th><th>Weaknesses</th></tr></thead><tbody>
+${r.benchmark.products.map(p=>`<tr><td><strong>${p.name}</strong></td>${Object.values(p.scores||{}).map(v=>`<td>${v}</td>`).join('')}<td>${(p.strengths||[]).join(', ')}</td><td>${(p.weaknesses||[]).join(', ')}</td></tr>`).join('')}
+</tbody></table>
+${r.benchmark.insights?.length?`<p><strong>Key insights:</strong></p><ul>${r.benchmark.insights.map(i=>`<li>${i}</li>`).join('')}</ul>`:''}
+${r.benchmark.recommendation?`<p><strong>Strategic recommendation:</strong> ${r.benchmark.recommendation}</p>`:''}
+`:''}
+<h2>Top Priorities</h2>
+<ol>${(r.top_priorities||[]).map(p=>`<li>${p}</li>`).join('')}</ol>
+<h2>Quick Wins</h2>
+<ol>${(r.quick_wins||[]).map(w=>`<li>${w}</li>`).join('')}</ol>
+</body></html>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ux-audit-report.html';
+  a.click();
+}
+
+function copyMarkdown(r) {
+  if(!r) return;
+  const md = `# UX Audit Report\n\n**Overall Score:** ${r.overall_score}/100 (${r.severity_label})\n**Accessibility Score:** ${r.a11y_score||'—'}/100\n\n## Summary\n${r.summary}\n\n## Heuristic Evaluation\n${(r.heuristics||[]).map(h=>`\n### ${h.id} — ${h.name}\n**Score:** ${h.score}/10 | **Severity:** ${['None','Minor','Moderate','Major','Critical'][h.severity]||''}\n\n${h.finding}\n\n**Issues:** ${(h.issues||[]).join(', ')}\n\n**Recommendations:**\n${(h.recommendations||[]).map((r,i)=>`${i+1}. ${r}`).join('\n')}`).join('\n')}\n\n## Top Priorities\n${(r.top_priorities||[]).map((p,i)=>`${i+1}. ${p}`).join('\n')}\n\n## Quick Wins\n${(r.quick_wins||[]).map((w,i)=>`${i+1}. ${w}`).join('\n')}`;
+  navigator.clipboard.writeText(md).then(()=>alert('Markdown copied to clipboard!')).catch(()=>alert('Copy failed — please use the Download button instead.'));
+}
+
+
+// ── Credit system ──────────────────────────────────────────
+const FREE_CREDITS = 1;
+function getCredits() {
+  const stored = localStorage.getItem('uxap_credits');
+  if (stored === null) {
+    localStorage.setItem('uxap_credits', FREE_CREDITS);
+    return FREE_CREDITS;
+  }
+  return parseInt(stored, 10);
+}
+function useCredit() {
+  const c = getCredits();
+  if (c <= 0) return false;
+  localStorage.setItem('uxap_credits', c - 1);
+  updateCreditBar();
+  return true;
+}
+function addCredits(n) {
+  localStorage.setItem('uxap_credits', getCredits() + n);
+  updateCreditBar();
+}
+function updateCreditBar() {
+  const c = getCredits();
+  const disp = document.getElementById('credit-display');
+  const bar = document.getElementById('credit-bar');
+  const paywall = document.getElementById('paywall');
+  if (disp) {
+    disp.textContent = c;
+    disp.className = c <= 0 ? 'credit-low' : '';
+  }
+  if (c <= 0) {
+    if (bar) bar.style.display = 'none';
+    if (paywall) paywall.classList.add('show');
+    // Hide the audit steps
+    document.getElementById('audit-main-layout').style.display = 'none';
+  }
+}
+// Check credits on page load
+document.addEventListener('DOMContentLoaded', updateCreditBar);
+
+// ── Override runAudit to use credit ────────────────────────
+const _origRunAudit = runAudit;
+// runAudit is defined below; we patch it after definition
+
+// Init
+buildChips(HEURISTICS, 'h-chips', selH);
+buildChips(A11Y, 'a11y-chips', selA);
+buildChips(DIMS.map(d=>({name:d})), 'dim-chips', selD);
+addComp(); addComp();
+</script>
+</body>
+</html>

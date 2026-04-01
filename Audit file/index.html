@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Audit Pro — AI-Powered UX Evaluation Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">
+        <div class="logo-grid">
+          <div></div><div></div><div></div><div></div>
+        </div>
+      </div>
+      <span class="logo-name">UX Audit Pro</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="audit.html" class="nav-link">Start Audit</a>
+      <a href="how.html" class="nav-link">How it works</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+    </div>
+    <a href="pricing.html" class="btn-nav">View pricing</a>
+    <button class="nav-toggle" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="audit.html" class="nav-link">Start Audit</a>
+    <a href="how.html" class="nav-link">How it works</a>
+    <a href="audit.html" class="btn-nav" style="margin-top:8px;display:inline-block;">Start free audit →</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg-lines"></div>
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span class="badge">AI-powered</span>
+        <span class="badge-sep">·</span>
+        <span>4 evaluation methods in one platform</span>
+      </div>
+      <h1 class="hero-title">
+        Professional UX audits<br>
+        <em>in minutes, not weeks</em>
+      </h1>
+      <p class="hero-sub">Upload your screenshots and descriptions. Get heuristic evaluation, accessibility audit, competitive benchmarking, and actionable reports — all powered by AI.</p>
+      <div class="hero-actions">
+        <a href="audit.html" class="btn-primary">Start your free audit</a>
+        <a href="how.html" class="btn-ghost">See how it works →</a>
+      </div>
+      <div class="hero-trust">
+        <span>Covers:</span>
+        <span class="trust-pill">Nielsen's 10 Heuristics</span>
+        <span class="trust-pill">WCAG Accessibility</span>
+        <span class="trust-pill">Competitive Benchmarking</span>
+        <span class="trust-pill">Exportable Reports</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Methods -->
+  <section class="methods">
+    <div class="container">
+      <div class="section-label">What we evaluate</div>
+      <h2 class="section-title">Four evaluation methods.<br>One comprehensive report.</h2>
+      <div class="methods-grid">
+        <div class="method-card">
+          <div class="method-num">01</div>
+          <div class="method-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="13" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="13" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <h3>Heuristic Evaluation</h3>
+          <p>Full analysis against Nielsen's 10 usability heuristics. Each heuristic scored 0–10 with severity ratings and specific issue callouts.</p>
+          <ul class="method-list">
+            <li>10 heuristics evaluated</li>
+            <li>Severity scoring (0–4)</li>
+            <li>Per-issue recommendations</li>
+          </ul>
+        </div>
+        <div class="method-card">
+          <div class="method-num">02</div>
+          <div class="method-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8 3.5C9.2 3 10.6 2.7 12 2.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Accessibility Audit</h3>
+          <p>WCAG-aligned evaluation across perceivability, operability, understandability, and robustness — plus color contrast and keyboard navigation.</p>
+          <ul class="method-list">
+            <li>WCAG 2.1 AA coverage</li>
+            <li>Pass / Warn / Fail per category</li>
+            <li>Remediation guidance</li>
+          </ul>
+        </div>
+        <div class="method-card">
+          <div class="method-num">03</div>
+          <div class="method-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 17l5-5 4 4 5-6 4 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>UX Benchmarking</h3>
+          <p>Score your product across learnability, efficiency, satisfaction, and 7 other dimensions. Visualised as bar charts for instant clarity.</p>
+          <ul class="method-list">
+            <li>10 benchmarking dimensions</li>
+            <li>Scored 0–10 per dimension</li>
+            <li>Comparative bar table</li>
+          </ul>
+        </div>
+        <div class="method-card">
+          <div class="method-num">04</div>
+          <div class="method-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M11 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 7l-2-2M5 17l-2 2M19 7l2-2M19 17l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Competitive Analysis</h3>
+          <p>Compare your UX against named competitors side-by-side. Surface where you lead, where you lag, and what to prioritise to gain the edge.</p>
+          <ul class="method-list">
+            <li>Unlimited competitors</li>
+            <li>Dimension-by-dimension table</li>
+            <li>Strategic recommendations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="how-strip">
+    <div class="container">
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-num">1</div>
+          <div class="how-text">
+            <strong>Upload</strong>
+            <span>Screenshots, reference files, and product description</span>
+          </div>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <div class="how-num">2</div>
+          <div class="how-text">
+            <strong>Configure</strong>
+            <span>Select heuristics, accessibility checks, competitors</span>
+          </div>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <div class="how-num">3</div>
+          <div class="how-text">
+            <strong>Analyse</strong>
+            <span>AI evaluates across all four methods simultaneously</span>
+          </div>
+        </div>
+        <div class="how-arrow">→</div>
+        <div class="how-step">
+          <div class="how-num">4</div>
+          <div class="how-text">
+            <strong>Report</strong>
+            <span>Export a full professional report for stakeholders</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Output preview -->
+  <section class="output-section">
+    <div class="container">
+      <div class="section-label">What you get</div>
+      <h2 class="section-title">Every output you need.</h2>
+      <div class="output-grid">
+        <div class="output-card featured">
+          <div class="output-tag">Included</div>
+          <h4>Full audit report</h4>
+          <p>Stakeholder-ready report with executive summary, findings, severity scores, and prioritised recommendations. Generate with one click.</p>
+        </div>
+        <div class="output-card">
+          <div class="output-tag">Included</div>
+          <h4>Severity scores</h4>
+          <p>Every heuristic rated 0–10 with a severity level from Minor to Critical, so your team knows what to fix first.</p>
+        </div>
+        <div class="output-card">
+          <div class="output-tag">Included</div>
+          <h4>Benchmarking table</h4>
+          <p>Side-by-side comparison of your product vs. competitors across all selected UX dimensions.</p>
+        </div>
+        <div class="output-card">
+          <div class="output-tag">Included</div>
+          <h4>Actionable recommendations</h4>
+          <p>Specific, implementable recommendations per finding — not vague advice, but concrete changes with expected impact.</p>
+        </div>
+        <div class="output-card">
+          <div class="output-tag">Included</div>
+          <h4>Implementation roadmap</h4>
+          <p>Prioritised roadmap with effort and impact estimates, ready to drop into your sprint planning.</p>
+        </div>
+        <div class="output-card">
+          <div class="output-tag">Included</div>
+          <h4>Accessibility report</h4>
+          <p>WCAG findings with pass/warn/fail status and specific remediation steps for each accessibility issue found.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Start with 1 free audit.</h2>
+        <p>No credit card required. Full access to all 4 evaluation methods.</p>
+        <a href="audit.html" class="btn-primary btn-lg" style="background:#fff;color:var(--ink);">Start free audit →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="logo">
+        <div class="logo-mark">
+          <div class="logo-grid">
+            <div></div><div></div><div></div><div></div>
+          </div>
+        </div>
+        <span class="logo-name">UX Audit Pro</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="audit.html">Start Audit</a>
+        <a href="how.html">How it works</a>
+      </div>
+      <div class="footer-copy">AI-powered UX evaluation platform</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleNav() {
+  document.getElementById('nav-mobile').classList.toggle('open');
+}
+</script>
+</body>
+</html>
