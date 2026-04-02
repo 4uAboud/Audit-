@@ -19,9 +19,10 @@
     </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
-      <a href="audit.html" class="nav-link">Start Audit</a>
+      <a href="new-study.html" class="nav-link">Start Audit</a>
       <a href="how.html" class="nav-link">How it works</a>
       <a href="pricing.html" class="nav-link active">Pricing</a>
+      <span id="nav-auth-pricing"></span>
     </div>
     <a href="pricing.html" class="btn-nav">Buy credits</a>
     <button class="nav-toggle" onclick="document.getElementById('nm').classList.toggle('open')">
@@ -30,7 +31,7 @@
   </div>
   <div class="nav-mobile" id="nm">
     <a href="index.html" class="nav-link">Home</a>
-    <a href="audit.html" class="nav-link">Start Audit</a>
+    <a href="new-study.html" class="nav-link">Start Audit</a>
     <a href="how.html" class="nav-link">How it works</a>
     <a href="pricing.html" class="nav-link active">Pricing</a>
   </div>
@@ -330,6 +331,13 @@ function togglePfaq(el) {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+(function(){
+  const u = JSON.parse(localStorage.getItem('uxap_user')||'null');
+  const el = document.getElementById('nav-auth-pricing');
+  if(el) el.innerHTML = u
+    ? `<a href="dashboard.html" class="nav-link" style="color:#1A4FBD;font-weight:600;">Dashboard</a>`
+    : `<a href="login.html" class="nav-link">Sign in</a>`;
+})();
 </script>
 </body>
 </html>

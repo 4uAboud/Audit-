@@ -860,7 +860,9 @@ async function handleSignup(e) {
     };
 
     localStorage.setItem('uxap_user', JSON.stringify(user));
-    window.location.href = 'dashboard.html';
+    // New users go to onboarding, returning users go to dashboard
+    const done = localStorage.getItem('uxap_onboarding_done');
+    window.location.href = done ? 'dashboard.html' : 'onboarding.html';
   } catch (err) {
     showMessage('Something went wrong. Please try again.', 'error');
     btn.disabled = false;

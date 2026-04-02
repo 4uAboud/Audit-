@@ -27,6 +27,8 @@
       --red-bg: #FDEAEA;
       --amber: #7A4A0A;
       --amber-bg: #FDF3E0;
+      --gold: #C8880A;
+      --gold-bg: #FEF9EC;
       --radius: 10px;
       --radius-lg: 16px;
     }
@@ -67,6 +69,11 @@
       text-decoration: none;
       transition: background 0.12s, color 0.12s;
       margin-bottom: 1px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
     }
     .sidebar-link:hover {
       background: rgba(255,255,255,0.08);
@@ -146,7 +153,7 @@
     /* ── Stats Grid ── */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 1rem;
     }
 
@@ -181,7 +188,10 @@
       font-family: 'Instrument Sans', sans-serif;
     }
 
-    /* ── Studies section ── */
+    /* ── Section ── */
+    .section {
+      margin-top: 2rem;
+    }
     .section-header {
       display: flex;
       align-items: center;
@@ -278,7 +288,67 @@
       font-family: 'Instrument Sans', sans-serif;
     }
 
+    /* ── Quick Actions ── */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .quick-action-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .quick-action-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      border-color: var(--blue-mid);
+    }
+
+    /* ── Favorite star button ── */
+    .star-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 7px 9px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      line-height: 1;
+      transition: background 0.12s, border-color 0.12s;
+      color: var(--ink-4);
+    }
+    .star-btn:hover {
+      background: var(--gold-bg);
+      border-color: var(--gold);
+    }
+    .star-btn.favorited {
+      color: var(--gold);
+      border-color: #f5c842;
+      background: var(--gold-bg);
+    }
+
+    /* ── Recent studies sub-label ── */
+    .sub-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--ink-4);
+      margin-bottom: 0.65rem;
+      margin-top: 0.1rem;
+    }
+
     /* ── Responsive ── */
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 960px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -325,6 +395,13 @@
           <path d="M2 5a1.5 1.5 0 011.5-1.5h3.25L8 5h4.5A1.5 1.5 0 0114 6.5v5A1.5 1.5 0 0112.5 13h-9A1.5 1.5 0 012 11.5V5z"/>
         </svg>
         My Studies
+      </a>
+
+      <a href="#favorites-section" class="sidebar-link" onclick="scrollToFavorites()">
+        <svg class="sidebar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8 2.5l1.545 3.13 3.455.502-2.5 2.436.59 3.44L8 10.385l-3.09 1.623.59-3.44L3 6.132l3.455-.502L8 2.5z"/>
+        </svg>
+        Favorites
       </a>
 
       <a href="new-study.html" class="sidebar-link new-study-btn">
@@ -409,10 +486,23 @@
           <div class="stat-val">—</div>
           <div class="stat-trend">Across completed</div>
         </div>
+        <div class="stat-card" id="stat-favorites">
+          <div class="stat-label">Favorites</div>
+          <div class="stat-val">—</div>
+          <div class="stat-trend">Starred studies</div>
+        </div>
+      </div>
+
+      <!-- ── Favorites Section ── -->
+      <div class="section" id="favorites-section" style="display:none">
+        <div class="section-header">
+          <div class="section-title">⭐ Favorites</div>
+        </div>
+        <div class="studies-grid" id="favorites-grid"></div>
       </div>
 
       <!-- ── Studies Section ── -->
-      <div style="margin-top:2rem;" id="studies">
+      <div class="section" id="studies">
 
         <div class="section-header">
           <span class="section-title">My studies</span>
@@ -438,6 +528,15 @@
               <option value="in-progress">In Progress</option>
               <option value="draft">Draft</option>
             </select>
+          </div>
+        </div>
+
+        <!-- Recent Studies sub-section -->
+        <div id="recent-section" style="display:none;margin-bottom:1.5rem;">
+          <div class="sub-section-label">Recently updated</div>
+          <div class="studies-grid" id="recent-grid"></div>
+          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.09em;color:var(--ink-4);">All studies</span>
           </div>
         </div>
 
@@ -477,6 +576,14 @@
       window.location.href = 'login.html';
     }
 
+    // ── Scroll to favorites ──
+    function scrollToFavorites() {
+      const el = document.getElementById('favorites-section');
+      if (el && el.style.display !== 'none') {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     // ── Helpers ──
     function scoreColor(s) {
       return s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--amber)' : 'var(--red)';
@@ -500,10 +607,14 @@
       const score  = study.result?.overall_score;
       const mColor = methodColors[study.methodology] || 'background:var(--bg-2);color:var(--ink-3)';
       const sColor = statusStyle[study.status] || statusStyle.draft;
-      const date   = new Date(study.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const dateStr = study.updatedAt || study.createdAt;
+      const date   = new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       const statusLabel = study.status === 'in-progress' ? 'In Progress'
                         : study.status === 'completed'   ? 'Completed'
                         : 'Draft';
+      const isFav = !!study.favorite;
+      const starClass = isFav ? 'star-btn favorited' : 'star-btn';
+      const starIcon  = isFav ? '⭐' : '☆';
 
       return `<div style="background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.25rem;transition:box-shadow .15s;"
                    onmouseenter="this.style.boxShadow='0 4px 16px rgba(0,0,0,.09)'"
@@ -527,10 +638,13 @@
         </div>` : ''}
 
         <div style="display:flex;gap:6px;margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--line);">
-          <a href="audit.html?studyId=${study.id}&view=report"
+          <a href="report.html?studyId=${study.id}"
              style="flex:1;text-align:center;padding:7px;background:var(--ink);color:#fff;border-radius:var(--radius);font-size:12px;font-weight:500;font-family:'Instrument Sans',sans-serif;text-decoration:none;transition:background .12s;"
              onmouseenter="this.style.background='var(--ink-2)'"
              onmouseleave="this.style.background='var(--ink)'">Open report</a>
+          <button onclick="toggleFavorite('${study.id}')"
+                  class="${starClass}"
+                  title="${isFav ? 'Remove from favorites' : 'Add to favorites'}">${starIcon}</button>
           <button onclick="duplicateStudy('${study.id}')"
                   style="padding:7px 11px;border:1px solid var(--line);border-radius:var(--radius);background:none;font-size:12px;color:var(--ink-3);cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:border-color .12s,color .12s;"
                   onmouseenter="this.style.borderColor='var(--ink-3)';this.style.color='var(--ink)'"
@@ -543,24 +657,65 @@
       </div>`;
     }
 
+    // ── Toggle favorite ──
+    function toggleFavorite(id) {
+      const studies = JSON.parse(localStorage.getItem('uxap_studies') || '[]');
+      const idx = studies.findIndex(s => s.id === id);
+      if (idx === -1) return;
+      studies[idx].favorite = !studies[idx].favorite;
+      localStorage.setItem('uxap_studies', JSON.stringify(studies));
+      loadStudies();
+    }
+
     // ── Load & render ──
     function loadStudies() {
       const studies = JSON.parse(localStorage.getItem('uxap_studies') || '[]');
 
-      const completed = studies.filter(s => s.status === 'completed');
-      const now       = new Date();
-      const thisMonth = studies.filter(s => {
+      const completed  = studies.filter(s => s.status === 'completed');
+      const favorites  = studies.filter(s => !!s.favorite);
+      const now        = new Date();
+      const thisMonth  = studies.filter(s => {
         const d = new Date(s.createdAt);
         return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
       });
-      const scores  = completed.filter(s => s.result?.overall_score != null).map(s => s.result.overall_score);
+      const scores   = completed.filter(s => s.result?.overall_score != null).map(s => s.result.overall_score);
       const avgScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
 
       document.getElementById('stat-total').querySelector('.stat-val').textContent     = studies.length;
       document.getElementById('stat-completed').querySelector('.stat-val').textContent = completed.length;
       document.getElementById('stat-month').querySelector('.stat-val').textContent     = thisMonth.length;
       document.getElementById('stat-score').querySelector('.stat-val').textContent     = avgScore ?? '—';
+      document.getElementById('stat-favorites').querySelector('.stat-val').textContent = favorites.length || '—';
 
+      // ── Favorites section ──
+      const favSection = document.getElementById('favorites-section');
+      const favGrid    = document.getElementById('favorites-grid');
+      if (favorites.length > 0) {
+        favSection.style.display = 'block';
+        favGrid.innerHTML = favorites.map(s => buildStudyCard(s)).join('');
+      } else {
+        favSection.style.display = 'none';
+        favGrid.innerHTML = '';
+      }
+
+      // ── Recent studies (top 3 by updatedAt or createdAt) ──
+      const recentSection = document.getElementById('recent-section');
+      const recentGrid    = document.getElementById('recent-grid');
+      if (studies.length >= 2) {
+        const sorted = [...studies].sort((a, b) => {
+          const da = new Date(a.updatedAt || a.createdAt);
+          const db = new Date(b.updatedAt || b.createdAt);
+          return db - da;
+        });
+        const recent = sorted.slice(0, 3);
+        recentGrid.innerHTML = recent.map(s => buildStudyCard(s)).join('');
+        recentSection.style.display = 'block';
+      } else {
+        recentSection.style.display = 'none';
+        recentGrid.innerHTML = '';
+      }
+
+      // ── All studies grid ──
       const grid  = document.getElementById('studies-grid');
       const empty = document.getElementById('empty-state');
 
@@ -597,7 +752,7 @@
       const studies = JSON.parse(localStorage.getItem('uxap_studies') || '[]');
       const orig    = studies.find(s => s.id === id);
       if (!orig) return;
-      const copy = { ...orig, id: 'study_' + Date.now(), title: orig.title + ' (copy)', createdAt: new Date().toISOString() };
+      const copy = { ...orig, id: 'study_' + Date.now(), title: orig.title + ' (copy)', createdAt: new Date().toISOString(), favorite: false };
       studies.unshift(copy);
       localStorage.setItem('uxap_studies', JSON.stringify(studies));
       loadStudies();

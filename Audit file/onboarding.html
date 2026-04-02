@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started — UX Audit Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:    #1A1A18;
+    --ink-2:  #3D3D3A;
+    --ink-3:  #6B6B65;
+    --ink-4:  #9B9B94;
+    --blue:   #1A4FBD;
+    --blue-light: #EEF3FF;
+    --blue-mid:   #4F7AE8;
+    --bg:     #FAFAF8;
+    --bg-2:   #F2F2ED;
+    --bg-3:   #E8E8E1;
+    --line:   #E0E0D8;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── Page layout ── */
+  .page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(26,79,189,0.07) 0%, transparent 70%),
+      var(--bg);
+  }
+
+  /* ── Card ── */
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    max-width: 640px;
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 2rem 1.25rem 1.5rem; border-radius: 16px; }
+  }
+
+  /* ── Progress dots ── */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 2.25rem;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    border: 1.5px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .dot.active {
+    width: 28px;
+    border-radius: 6px;
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .dot.done {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .dot.done::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 3px;
+    border-left: 1.5px solid #fff;
+    border-bottom: 1.5px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+  }
+
+  /* ── Step counter ── */
+  .step-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.75rem;
+  }
+
+  /* ── Steps container ── */
+  .steps-wrap {
+    position: relative;
+    min-height: 340px;
+  }
+
+  .step {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.32s ease, transform 0.32s ease;
+    pointer-events: none;
+  }
+
+  .step.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    position: relative;
+  }
+
+  .step.exit-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    pointer-events: none;
+  }
+
+  /* ── Typography inside steps ── */
+  .step-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+
+  .step-sub {
+    font-size: 0.975rem;
+    color: var(--ink-3);
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+  }
+
+  /* ── Step 1: Feature icon grid ── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .feature-tile {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .feature-tile-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feature-tile-icon svg {
+    width: 18px;
+    height: 18px;
+    color: var(--blue);
+  }
+
+  .feature-tile-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    line-height: 1.3;
+  }
+
+  /* ── Step 2: Feature cards ── */
+  .feature-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .feat-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.1rem;
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .feat-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .feat-card-icon svg {
+    width: 17px;
+    height: 17px;
+    color: var(--blue);
+  }
+
+  .feat-card-body {}
+  .feat-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+  .feat-card-desc {
+    font-size: 0.825rem;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+
+  /* ── Step 3: Numbered steps ── */
+  .how-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .how-step {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .how-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .how-text {}
+  .how-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.15rem;
+  }
+  .how-desc {
+    font-size: 0.825rem;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+
+  .credit-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    margin-bottom: 1.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .credit-note svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ── Step 4: Methodology grid ── */
+  .method-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .method-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+  }
+
+  .method-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .method-icon svg {
+    width: 16px;
+    height: 16px;
+    color: var(--blue);
+  }
+
+  .method-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+  }
+
+  .method-liner {
+    font-size: 0.775rem;
+    color: var(--ink-3);
+    line-height: 1.45;
+  }
+
+  .method-note {
+    font-size: 0.8rem;
+    color: var(--ink-4);
+    margin-bottom: 1.75rem;
+  }
+
+  /* ── Step 5: Ready ── */
+  .ready-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.75rem;
+  }
+
+  .ready-badge {
+    width: 72px;
+    height: 72px;
+    background: var(--blue-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ready-badge svg {
+    width: 36px;
+    height: 36px;
+    color: var(--blue);
+  }
+
+  .ready-note {
+    font-size: 0.8rem;
+    color: var(--ink-4);
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  /* ── Buttons ── */
+  .btn-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-row.split {
+    justify-content: space-between;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--radius);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    line-height: 1;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #2a2a26;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26,26,24,0.18);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-blue {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .btn-blue:hover {
+    background: #1645a8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26,79,189,0.28);
+  }
+
+  .btn-blue:active { transform: translateY(0); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-3);
+    border: 1px solid var(--line);
+  }
+
+  .btn-ghost:hover {
+    background: var(--bg-2);
+    color: var(--ink);
+    border-color: var(--bg-3);
+  }
+
+  .btn-back {
+    background: none;
+    border: none;
+    color: var(--ink-4);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem 0;
+    transition: color 0.15s;
+  }
+
+  .btn-back:hover { color: var(--ink); }
+
+  .btn-row-final {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .btn-row-final .btn { justify-content: center; width: 100%; }
+
+  /* ── Divider ── */
+  .card-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 1.75rem 0 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="card">
+
+    <!-- Progress dots -->
+    <div class="progress-row" id="progress-dots" aria-label="Onboarding progress">
+      <div class="dot active" data-step="0" role="presentation"></div>
+      <div class="dot"        data-step="1" role="presentation"></div>
+      <div class="dot"        data-step="2" role="presentation"></div>
+      <div class="dot"        data-step="3" role="presentation"></div>
+      <div class="dot"        data-step="4" role="presentation"></div>
+    </div>
+
+    <!-- Step counter -->
+    <div class="step-counter" id="step-counter">Step 1 of 5</div>
+
+    <!-- Steps wrapper -->
+    <div class="steps-wrap" id="steps-wrap">
+
+      <!-- ───────────── STEP 1 — Welcome ───────────── -->
+      <div class="step active" id="step-0" aria-live="polite">
+        <h1 class="step-heading">Welcome to UX Audit Pro</h1>
+        <p class="step-sub">The professional platform for UX audits, heuristic evaluations, and research reporting.</p>
+
+        <div class="feature-grid">
+          <div class="feature-tile">
+            <div class="feature-tile-icon">
+              <!-- AI Analysis icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 0 6h-1v1a4 4 0 0 1-8 0v-1H7a3 3 0 0 1 0-6h1V6a4 4 0 0 1 4-4z"/>
+                <circle cx="9" cy="9" r="0.5" fill="currentColor" stroke="none"/>
+                <circle cx="15" cy="9" r="0.5" fill="currentColor" stroke="none"/>
+                <path d="M9 15s1 1.5 3 1.5 3-1.5 3-1.5"/>
+              </svg>
+            </div>
+            <span class="feature-tile-label">AI Analysis</span>
+          </div>
+          <div class="feature-tile">
+            <div class="feature-tile-icon">
+              <!-- Visual Reports icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="3"/>
+                <path d="M8 17V13"/>
+                <path d="M12 17V9"/>
+                <path d="M16 17v-4"/>
+              </svg>
+            </div>
+            <span class="feature-tile-label">Visual Reports</span>
+          </div>
+          <div class="feature-tile">
+            <div class="feature-tile-icon">
+              <!-- Study History icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 8v4l2.5 2.5"/>
+                <circle cx="12" cy="12" r="9"/>
+              </svg>
+            </div>
+            <span class="feature-tile-label">Study History</span>
+          </div>
+          <div class="feature-tile">
+            <div class="feature-tile-icon">
+              <!-- Multiple Methods icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </div>
+            <span class="feature-tile-label">Multiple Methods</span>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="goTo(1)">Let's get started →</button>
+        </div>
+      </div>
+
+      <!-- ───────────── STEP 2 — What is this tool ───────────── -->
+      <div class="step" id="step-1">
+        <h2 class="step-heading">What can you do here?</h2>
+        <p class="step-sub">Everything you need to evaluate digital products professionally.</p>
+
+        <div class="feature-cards">
+          <div class="feat-card">
+            <div class="feat-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 0 6h-1v1a4 4 0 0 1-8 0v-1H7a3 3 0 0 1 0-6h1V6a4 4 0 0 1 4-4z"/>
+                <circle cx="9" cy="9" r="0.5" fill="currentColor" stroke="none"/>
+                <circle cx="15" cy="9" r="0.5" fill="currentColor" stroke="none"/>
+                <path d="M9 15s1 1.5 3 1.5 3-1.5 3-1.5"/>
+              </svg>
+            </div>
+            <div class="feat-card-body">
+              <div class="feat-card-title">Run AI-powered audits</div>
+              <div class="feat-card-desc">Upload screenshots and get instant UX analysis with severity ratings and recommendations.</div>
+            </div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </div>
+            <div class="feat-card-body">
+              <div class="feat-card-title">Choose your methodology</div>
+              <div class="feat-card-desc">Heuristic Evaluation, Accessibility Audit, Cognitive Walkthrough, and more.</div>
+            </div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="3"/>
+                <path d="M8 17V13"/>
+                <path d="M12 17V9"/>
+                <path d="M16 17v-4"/>
+              </svg>
+            </div>
+            <div class="feat-card-body">
+              <div class="feat-card-title">Generate beautiful reports</div>
+              <div class="feat-card-desc">Professional reports with annotated screenshots, ready to share with clients.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row split">
+          <button class="btn-back" onclick="goTo(0)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" onclick="goTo(2)">Next →</button>
+        </div>
+      </div>
+
+      <!-- ───────────── STEP 3 — How to start ───────────── -->
+      <div class="step" id="step-2">
+        <h2 class="step-heading">How to run your first audit</h2>
+        <p class="step-sub">It's simple. Follow these 3 steps:</p>
+
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-num">1</div>
+            <div class="how-text">
+              <div class="how-title">Upload screenshots</div>
+              <div class="how-desc">Add 1–5 screens of the UI you want to evaluate.</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">2</div>
+            <div class="how-text">
+              <div class="how-title">Configure evaluation</div>
+              <div class="how-desc">Choose focus areas and evaluation criteria.</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">3</div>
+            <div class="how-text">
+              <div class="how-title">Get your report</div>
+              <div class="how-desc">AI analyzes and generates a detailed report in seconds.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="credit-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4"/>
+            <path d="M12 16h.01"/>
+          </svg>
+          Each audit uses 1 credit. You have 1 free credit to start.
+        </div>
+
+        <div class="btn-row split">
+          <button class="btn-back" onclick="goTo(1)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" onclick="goTo(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- ───────────── STEP 4 — Methodology ───────────── -->
+      <div class="step" id="step-3">
+        <h2 class="step-heading">Every study has a methodology</h2>
+        <p class="step-sub">UX Audit Pro supports multiple evaluation frameworks:</p>
+
+        <div class="method-grid">
+          <div class="method-card">
+            <div class="method-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+              </svg>
+            </div>
+            <div class="method-name">Heuristic Evaluation</div>
+            <div class="method-liner">Nielsen's 10 usability heuristics</div>
+          </div>
+          <div class="method-card">
+            <div class="method-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v2"/>
+                <path d="M12 16v2"/>
+                <path d="M6 12h2"/>
+                <path d="M16 12h2"/>
+              </svg>
+            </div>
+            <div class="method-name">Accessibility Audit</div>
+            <div class="method-liner">WCAG compliance checking</div>
+          </div>
+          <div class="method-card">
+            <div class="method-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="method-name">Cognitive Walkthrough</div>
+            <div class="method-liner">Task-based usability review</div>
+          </div>
+          <div class="method-card">
+            <div class="method-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="3"/>
+                <path d="M8 17V13"/>
+                <path d="M12 17V9"/>
+                <path d="M16 17v-4"/>
+              </svg>
+            </div>
+            <div class="method-name">UX Audit</div>
+            <div class="method-liner">Full multi-dimensional analysis</div>
+          </div>
+        </div>
+
+        <p class="method-note">You'll choose your methodology when you start a new study.</p>
+
+        <div class="btn-row split">
+          <button class="btn-back" onclick="goTo(2)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" onclick="goTo(4)">Next →</button>
+        </div>
+      </div>
+
+      <!-- ───────────── STEP 5 — Ready ───────────── -->
+      <div class="step" id="step-4">
+        <h2 class="step-heading">You're all set!</h2>
+        <p class="step-sub">Start your first audit or explore your dashboard.</p>
+
+        <div class="ready-visual">
+          <div class="ready-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="btn-row-final">
+          <a href="new-study.html" class="btn btn-blue" onclick="completeOnboarding()">Start your first audit →</a>
+          <a href="dashboard.html" class="btn btn-ghost" onclick="completeOnboarding()">Go to Dashboard</a>
+        </div>
+
+        <p class="ready-note">You can always access this guide from the Help menu.</p>
+      </div>
+
+    </div><!-- /steps-wrap -->
+
+  </div><!-- /card -->
+</div><!-- /page -->
+
+<script>
+  // ── Redirect if already onboarded ──
+  document.addEventListener('DOMContentLoaded', function () {
+    if (localStorage.getItem('uxap_onboarding_done') === '1') {
+      window.location.href = 'dashboard.html';
+    }
+  });
+
+  // ── State ──
+  let currentStep = 0;
+  const TOTAL = 5;
+
+  // ── Navigation ──
+  function goTo(next) {
+    if (next < 0 || next >= TOTAL) return;
+
+    const current = document.getElementById('step-' + currentStep);
+    const target  = document.getElementById('step-' + next);
+    const goingForward = next > currentStep;
+
+    // Animate out current
+    current.classList.remove('active');
+    current.classList.add(goingForward ? 'exit-left' : 'exit-right');
+
+    // Position incoming off-screen instantly
+    target.style.transition = 'none';
+    target.style.opacity = '0';
+    target.style.transform = goingForward ? 'translateX(40px)' : 'translateX(-40px)';
+    target.style.position = 'absolute';
+
+    // Force reflow then animate in
+    void target.offsetWidth;
+    target.style.transition = '';
+    target.style.position = '';
+
+    requestAnimationFrame(function () {
+      target.classList.add('active');
+      target.style.opacity = '';
+      target.style.transform = '';
+    });
+
+    // Clean up exiting step after transition
+    setTimeout(function () {
+      current.classList.remove('exit-left', 'exit-right');
+      current.style.position = 'absolute';
+    }, 340);
+
+    currentStep = next;
+    updateProgress();
+    updateCounter();
+  }
+
+  function updateProgress() {
+    var dots = document.querySelectorAll('.dot');
+    dots.forEach(function (dot, i) {
+      dot.classList.remove('active', 'done');
+      if (i < currentStep)       dot.classList.add('done');
+      else if (i === currentStep) dot.classList.add('active');
+    });
+  }
+
+  function updateCounter() {
+    document.getElementById('step-counter').textContent =
+      'Step ' + (currentStep + 1) + ' of ' + TOTAL;
+  }
+
+  function completeOnboarding() {
+    localStorage.setItem('uxap_onboarding_done', '1');
+  }
+
+  // ── Keyboard navigation ──
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' && currentStep < TOTAL - 1) goTo(currentStep + 1);
+    if (e.key === 'ArrowLeft'  && currentStep > 0)         goTo(currentStep - 1);
+  });
+</script>
+
+</body>
+</html>

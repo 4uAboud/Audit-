@@ -19,19 +19,22 @@
     </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
-      <a href="audit.html" class="nav-link">Start Audit</a>
+      <a href="new-study.html" class="nav-link">Start Audit</a>
       <a href="how.html" class="nav-link active">How it works</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <span id="nav-auth-how"></span>
     </div>
-    <a href="audit.html" class="btn-nav">Start free audit →</a>
+    <a href="new-study.html" class="btn-nav">Start free audit →</a>
     <button class="nav-toggle" onclick="document.getElementById('nm').classList.toggle('open')">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-mobile" id="nm">
     <a href="index.html" class="nav-link">Home</a>
-    <a href="audit.html" class="nav-link">Start Audit</a>
+    <a href="new-study.html" class="nav-link">Start Audit</a>
     <a href="how.html" class="nav-link active">How it works</a>
-    <a href="audit.html" class="btn-nav" style="margin-top:8px;display:inline-block;">Start free audit →</a>
+    <a href="pricing.html" class="nav-link">Pricing</a>
+    <a href="new-study.html" class="btn-nav" style="margin-top:8px;display:inline-block;">Start free audit →</a>
   </div>
 </nav>
 
@@ -255,6 +258,13 @@
 </footer>
 
 <script>
+(function(){
+  const u = JSON.parse(localStorage.getItem('uxap_user')||'null');
+  const el = document.getElementById('nav-auth-how');
+  if(el) el.innerHTML = u
+    ? `<a href="dashboard.html" class="nav-link" style="color:#1A4FBD;font-weight:600;">Dashboard</a>`
+    : `<a href="login.html" class="nav-link">Sign in</a>`;
+})();
 function toggleFaq(el) {
   const body = el.nextElementSibling;
   const caret = el.querySelector('.faq-caret');
