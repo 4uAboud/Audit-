@@ -18,28 +18,28 @@
       <span class="logo-name">UX Audit Pro</span>
     </a>
     <div class="nav-links">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="audit.html" class="nav-link active">Start Audit</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="new-study.html" class="nav-link">New Study</a>
       <a href="how.html" class="nav-link">How it works</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
     </div>
-    <a href="audit.html" class="btn-nav">New audit</a>
+    <a href="new-study.html" class="btn-nav">New audit</a>
     <button class="nav-toggle" onclick="document.getElementById('nm').classList.toggle('open')">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-mobile" id="nm">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="audit.html" class="nav-link active">Start Audit</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="new-study.html" class="nav-link">New Study</a>
     <a href="how.html" class="nav-link">How it works</a>
   </div>
 </nav>
 
 <div class="page-header">
   <div class="container">
-    <span class="page-header-eyebrow">UX Evaluation</span>
-    <h1>Start your audit</h1>
-    <p>Upload your designs, configure your evaluation, and get a full AI-powered UX report.</p>
+    <span class="page-header-eyebrow" id="method-eyebrow">UX Evaluation</span>
+    <h1 id="method-title">Start your audit</h1>
+    <p id="method-desc">Upload your designs, configure your evaluation, and get a full AI-powered UX report.</p>
   </div>
 </div>
 
@@ -89,18 +89,10 @@
           </div>
           <div class="sidebar-step" id="ss2" onclick="goStep(2)">
             <div class="step-dot">2</div>
-            <span>Heuristics</span>
+            <span id="ss2-label">Evaluation setup</span>
           </div>
-          <div class="sidebar-step" id="ss3" onclick="goStep(3)">
+          <div class="sidebar-step" id="ss3" style="display:none">
             <div class="step-dot">3</div>
-            <span>Accessibility</span>
-          </div>
-          <div class="sidebar-step" id="ss4" onclick="goStep(4)">
-            <div class="step-dot">4</div>
-            <span>Competitors</span>
-          </div>
-          <div class="sidebar-step" id="ss5" onclick="goStep(5)" style="display:none">
-            <div class="step-dot">5</div>
             <span>Results</span>
           </div>
         </div>
@@ -187,75 +179,22 @@
           </div>
 
           <div class="btn-row">
-            <button class="btn-run" onclick="goStep(2)">Next: Heuristics →</button>
+            <button class="btn-run" onclick="goStep(2)">Next: Evaluation Setup →</button>
           </div>
         </div>
 
-        <!-- Step 2: Heuristics -->
+        <!-- Step 2: Dynamic methodology setup -->
         <div class="audit-panel" id="p2">
-          <div class="panel-card">
-            <div class="panel-card-title">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
-              Nielsen's 10 Heuristics
-            </div>
-            <p style="font-size:14px;margin-bottom:1.25rem;">Select which heuristics to include in your evaluation. Each will be scored 0–10 with severity ratings and recommendations.</p>
-            <div class="chip-grid" id="h-chips"></div>
-          </div>
+          <div id="methodology-form"><!-- populated by buildMethodologyForm() --></div>
           <div class="btn-row">
             <button class="btn-back" onclick="goStep(1)">← Back</button>
-            <button class="btn-run" onclick="goStep(3)">Next: Accessibility →</button>
-          </div>
-        </div>
-
-        <!-- Step 3: Accessibility -->
-        <div class="audit-panel" id="p3">
-          <div class="panel-card">
-            <div class="panel-card-title">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="4" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M9 6.5V11M6 8h6M6.5 16l2.5-5 2.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Accessibility checks
-            </div>
-            <p style="font-size:14px;margin-bottom:1.25rem;">Select which WCAG criteria and accessibility areas to evaluate. Each will receive a pass / warn / fail rating with remediation guidance.</p>
-            <div class="chip-grid" id="a11y-chips"></div>
-          </div>
-          <div class="btn-row">
-            <button class="btn-back" onclick="goStep(2)">← Back</button>
-            <button class="btn-run" onclick="goStep(4)">Next: Competitors →</button>
-          </div>
-        </div>
-
-        <!-- Step 4: Competitors -->
-        <div class="audit-panel" id="p4">
-          <div class="panel-card">
-            <div class="panel-card-title">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="6" cy="9" r="3" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M9 9h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              Competitor products
-            </div>
-            <p style="font-size:14px;margin-bottom:1.25rem;">Add competitor products for side-by-side benchmarking. The AI will compare your UX against each one across all selected dimensions.</p>
-            <div id="comp-list"></div>
-            <button class="btn-add-comp" onclick="addComp()">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-              Add competitor
-            </button>
-          </div>
-
-          <div class="panel-card">
-            <div class="panel-card-title">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14l4-5 3 3 3-4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 17h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-              Benchmarking dimensions
-            </div>
-            <p style="font-size:14px;margin-bottom:1.25rem;">Select dimensions to score across your product and competitors.</p>
-            <div class="chip-grid" id="dim-chips"></div>
-          </div>
-
-          <div class="btn-row">
-            <button class="btn-back" onclick="goStep(3)">← Back</button>
-            <button class="btn-run" id="run-btn" onclick="runAudit()">Run full audit</button>
+            <button class="btn-run" id="run-btn" onclick="runAudit()">Run analysis →</button>
           </div>
           <div class="status-row" id="status-row"></div>
         </div>
 
-        <!-- Step 5: Results -->
-        <div class="audit-panel" id="p5">
+        <!-- Step 3: Results -->
+        <div class="audit-panel" id="p3">
           <div class="results-panel show" id="results-area"></div>
         </div>
 
@@ -312,10 +251,244 @@ const DIMS = [
   "Visual clarity","Navigation","Accessibility","Onboarding","Performance feel"
 ];
 
+const METHODOLOGY = new URLSearchParams(window.location.search).get('methodology') || 'ux-audit';
+
+const ASSIST_TECH = ['Screen readers','Keyboard navigation','Voice control','Touch / mobile','High contrast mode'];
+const EVAL_DIMS = ['Visual Design','Navigation','Content Quality','Interaction Design','Information Architecture','Performance Feel','Onboarding Flow','Error Handling'];
+const SUCCESS_METRICS = ['Task completion','Time on task','Error rate','User satisfaction','NPS score','Findability'];
+const JOURNEY_STAGES = ['Awareness','Discovery','Consideration','Sign-up / Purchase','Onboarding','Core usage','Support','Retention'];
+
+const METHOD_META = {
+  'heuristic-evaluation':{label:'Heuristic Evaluation',title:'Heuristic Evaluation',desc:"Evaluate your UI against Nielsen's 10 usability heuristics."},
+  'accessibility-review':{label:'Accessibility Audit',title:'Accessibility Audit',desc:'Check WCAG compliance and identify accessibility barriers.'},
+  'cognitive-walkthrough':{label:'Cognitive Walkthrough',title:'Cognitive Walkthrough',desc:'Evaluate the interface through the eyes of a user trying to complete a goal.'},
+  'expert-review':{label:'Expert Review',title:'Expert UX Review',desc:'Multi-dimensional expert evaluation against industry standards.'},
+  'usability-testing':{label:'Usability Testing',title:'Usability Testing Analysis',desc:'Analyze task completion, efficiency, and satisfaction.'},
+  'user-interview':{label:'User Interview',title:'User Interview Analysis',desc:'Synthesize themes and insights from user research interviews.'},
+  'journey-map':{label:'Journey Map Review',title:'Journey Map Review',desc:'Evaluate the end-to-end user journey across all touchpoints.'},
+  'journey-review':{label:'Journey Map Review',title:'Journey Map Review',desc:'Evaluate the end-to-end user journey across all touchpoints.'},
+  'ux-audit':{label:'UX Audit',title:'Full UX Audit',desc:'Comprehensive multi-dimensional UX evaluation including heuristics, accessibility, and competitive benchmarking.'},
+};
+
 let selH = new Set(HEURISTICS.map((_,i)=>i));
 let selA = new Set([0,1,2,3,4,5,6,8,9]);
 let selD = new Set([0,1,3,4,5,6,7]);
+let selAssist = new Set([0,1,3]);
+let selEvalDims = new Set([0,1,2,3,4,5,6,7]);
+let selMetrics = new Set([0,1,2,3,5]);
+let selStages = new Set([1,2,3,4,5]);
 let imgFiles = [], refFiles = [], comps = [], imgDataURLs = [];
+
+function buildMethodologyForm() {
+  const meta = METHOD_META[METHODOLOGY] || METHOD_META['ux-audit'];
+  const eyebrow = document.getElementById('method-eyebrow');
+  const title = document.getElementById('method-title');
+  const mdesc = document.getElementById('method-desc');
+  const ss2label = document.getElementById('ss2-label');
+  if(eyebrow) eyebrow.textContent = meta.label;
+  if(title) title.textContent = meta.title;
+  if(mdesc) mdesc.textContent = meta.desc;
+  if(ss2label) ss2label.textContent = meta.label + ' Setup';
+
+  const container = document.getElementById('methodology-form');
+  if(!container) return;
+
+  if(METHODOLOGY === 'heuristic-evaluation') {
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>Nielsen's 10 Heuristics</div>
+        <p style="font-size:14px;margin-bottom:1.25rem;">Select which heuristics to include. Each will be scored 0–10 with severity ratings and recommendations.</p>
+        <div class="chip-grid" id="h-chips"></div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v3l2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Evaluation details</div>
+        <div class="input-2col">
+          <div class="field"><label class="field-label">Evaluation scope</label>
+            <select id="eval-scope"><option>Full product review</option><option>Specific user flow</option><option>Single screen</option></select></div>
+          <div class="field"><label class="field-label">Primary user task</label>
+            <input type="text" id="user-task" placeholder="e.g. Complete checkout, Search and filter…"></div>
+        </div>
+        <div class="field"><label class="field-label">Known usability concerns</label>
+          <textarea id="known-concerns" placeholder="Any known issues or specific areas to focus on…"></textarea></div>
+      </div>`;
+    buildChips(HEURISTICS, 'h-chips', selH);
+
+  } else if(METHODOLOGY === 'accessibility-review') {
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="4" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M9 6.5V11M6 8h6M6.5 16l2.5-5 2.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>WCAG Compliance Target</div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="wcag-level" value="A"> Level A (minimum)</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="wcag-level" value="AA" checked> Level AA (recommended)</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="wcag-level" value="AAA"> Level AAA (enhanced)</label>
+        </div>
+        <p style="font-size:14px;margin-bottom:1rem;">Select WCAG principles to evaluate:</p>
+        <div class="chip-grid" id="a11y-chips"></div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M6 9h6M9 6v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Assistive technology focus</div>
+        <div class="chip-grid" id="assist-chips"></div>
+        <div class="field" style="margin-top:1rem;"><label class="field-label">Known accessibility issues</label>
+          <textarea id="known-a11y" placeholder="Any known accessibility issues or specific concerns…"></textarea></div>
+      </div>`;
+    buildChips(A11Y, 'a11y-chips', selA);
+    buildChips(ASSIST_TECH.map(n=>({name:n})), 'assist-chips', selAssist);
+
+  } else if(METHODOLOGY === 'cognitive-walkthrough') {
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M3 16c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>User & Goal</div>
+        <div class="input-2col">
+          <div class="field"><label class="field-label">User persona</label>
+            <textarea id="cw-persona" placeholder="e.g. First-time user, age 30, non-technical, mobile-first…" style="min-height:70px;"></textarea></div>
+          <div class="field"><label class="field-label">Experience level</label>
+            <select id="cw-exp"><option>Complete beginner</option><option selected>Occasional user</option><option>Regular user</option><option>Power user / Expert</option></select></div>
+        </div>
+        <div class="field"><label class="field-label">Primary user goal</label>
+          <input type="text" id="cw-goal" placeholder="e.g. Complete first purchase, Find and book a service…"></div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4h10M4 8h7M4 12h8M4 16h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Task steps <span style="font-size:12px;color:var(--ink-4);font-weight:400;">(up to 8)</span></div>
+        <p style="font-size:14px;margin-bottom:1rem;">Add the specific steps the user takes to achieve their goal.</p>
+        <div id="cw-steps-list"></div>
+        <button class="btn-add-comp" onclick="addCWStep()"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Add step</button>
+      </div>`;
+    addCWStep(); addCWStep();
+
+  } else if(METHODOLOGY === 'expert-review') {
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l2.09 4.26L16 7.27l-3.5 3.41.83 4.82L9 13.2l-4.33 2.3.83-4.82L2 7.27l4.91-.71z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Evaluation dimensions</div>
+        <p style="font-size:14px;margin-bottom:1rem;">Select which dimensions to evaluate:</p>
+        <div class="chip-grid" id="eval-chips"></div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5 7h8M5 10h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Expert criteria</div>
+        <div class="field"><label class="field-label">Industry benchmark / standards</label>
+          <input type="text" id="er-benchmark" placeholder="e.g. Apple HIG, Material Design, WCAG, Nielsen Norman…"></div>
+        <div class="field"><label class="field-label">Evaluation focus areas</label>
+          <textarea id="er-focus" placeholder="Specific flows, screens, or criteria to prioritize…"></textarea></div>
+        <div class="field"><label class="field-label">Prior findings to verify (optional)</label>
+          <textarea id="er-prior" placeholder="Any previous hypotheses or issues to confirm or rule out…" style="min-height:60px;"></textarea></div>
+      </div>`;
+    buildChips(EVAL_DIMS.map(n=>({name:n})), 'eval-chips', selEvalDims);
+
+  } else if(METHODOLOGY === 'usability-testing') {
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M6 16h6M9 13v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Test configuration</div>
+        <div class="input-2col">
+          <div class="field"><label class="field-label">Testing context</label>
+            <select id="ut-context"><option>Moderated (guided)</option><option>Unmoderated (self-guided)</option><option>Remote testing</option><option>Lab testing</option></select></div>
+          <div class="field"><label class="field-label">Participants</label>
+            <input type="text" id="ut-participants" placeholder="e.g. 5 participants, 25-45 yrs, e-commerce users"></div>
+        </div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M3 9h9M3 13h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Task scenarios <span style="font-size:12px;color:var(--ink-4);font-weight:400;">(up to 6)</span></div>
+        <div id="ut-scenarios-list"></div>
+        <button class="btn-add-comp" onclick="addUTScenario()"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Add scenario</button>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14l4-5 3 3 3-4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Success metrics</div>
+        <div class="chip-grid" id="metric-chips"></div>
+      </div>`;
+    addUTScenario(); addUTScenario();
+    buildChips(SUCCESS_METRICS.map(n=>({name:n})), 'metric-chips', selMetrics);
+
+  } else if(METHODOLOGY === 'user-interview') {
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M13 8c0 2.761-1.791 5-4 5s-4-2.239-4-5 1.791-5 4-5 4 2.239 4 5z" stroke="currentColor" stroke-width="1.4"/><path d="M5 15.5c0-1.657 1.791-3 4-3s4 1.343 4 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Interview context</div>
+        <div class="field"><label class="field-label">Research objective</label>
+          <textarea id="ui-objective" placeholder="What are you trying to learn from these interviews?"></textarea></div>
+        <div class="input-2col">
+          <div class="field"><label class="field-label">Number of interviews</label>
+            <input type="number" id="ui-count" placeholder="e.g. 8" min="1" max="100"></div>
+          <div class="field"><label class="field-label">Participant profile</label>
+            <input type="text" id="ui-profile" placeholder="e.g. B2B customers, recent sign-ups…"></div>
+        </div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4h10M4 8h7M4 12h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Key themes <span style="font-size:12px;color:var(--ink-4);font-weight:400;">(up to 8)</span></div>
+        <div id="ui-themes-list"></div>
+        <button class="btn-add-comp" onclick="addUITheme()"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Add theme</button>
+        <div class="field" style="margin-top:1rem;"><label class="field-label">Key findings / notes</label>
+          <textarea id="ui-findings" placeholder="Summarize key insights or patterns from the interviews…"></textarea></div>
+      </div>`;
+    addUITheme(); addUITheme();
+
+  } else if(METHODOLOGY === 'journey-map' || METHODOLOGY === 'journey-review') {
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9c2-4 4-4 6 0s4 4 6 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Journey details</div>
+        <div class="input-2col">
+          <div class="field"><label class="field-label">User persona</label>
+            <input type="text" id="jm-persona" placeholder="e.g. Sarah, 32, first-time buyer"></div>
+          <div class="field"><label class="field-label">Journey goal</label>
+            <input type="text" id="jm-goal" placeholder="e.g. Complete first purchase"></div>
+        </div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="6" width="14" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M6 6V4M12 6V4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Journey stages</div>
+        <p style="font-size:14px;margin-bottom:1rem;">Select stages to evaluate:</p>
+        <div class="chip-grid" id="stage-chips"></div>
+        <div class="field" style="margin-top:1rem;"><label class="field-label">Key touchpoints</label>
+          <textarea id="jm-touchpoints" placeholder="Describe main touchpoints (email, website, app, support…)"></textarea></div>
+        <div class="field"><label class="field-label">Known pain points</label>
+          <textarea id="jm-painpoints" placeholder="Any known friction points in the journey…" style="min-height:60px;"></textarea></div>
+      </div>`;
+    buildChips(JOURNEY_STAGES.map(n=>({name:n})), 'stage-chips', selStages);
+
+  } else {
+    // ux-audit (default)
+    container.innerHTML = `
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>Heuristic evaluation</div>
+        <p style="font-size:14px;margin-bottom:1.25rem;">Select which of Nielsen's 10 heuristics to evaluate:</p>
+        <div class="chip-grid" id="h-chips"></div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="4" r="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M9 6.5V11M6 8h6M6.5 16l2.5-5 2.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Accessibility checks</div>
+        <p style="font-size:14px;margin-bottom:1.25rem;">Select WCAG criteria to evaluate:</p>
+        <div class="chip-grid" id="a11y-chips"></div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-title"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="6" cy="9" r="3" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.4"/></svg>Competitor benchmarking <span style="font-size:12px;color:var(--ink-4);font-weight:400;">(optional)</span></div>
+        <div id="comp-list"></div>
+        <button class="btn-add-comp" onclick="addComp()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Add competitor</button>
+        <div style="margin-top:1.25rem;"><p style="font-size:14px;margin-bottom:1rem;">Benchmark dimensions:</p><div class="chip-grid" id="dim-chips"></div></div>
+      </div>`;
+    buildChips(HEURISTICS, 'h-chips', selH);
+    buildChips(A11Y, 'a11y-chips', selA);
+    buildChips(DIMS.map(d=>({name:d})), 'dim-chips', selD);
+    addComp(); addComp(); renderComps();
+  }
+}
+
+// Dynamic list helpers
+function addCWStep() {
+  const list = document.getElementById('cw-steps-list');
+  if(!list || list.children.length >= 8) return;
+  const n = list.children.length + 1;
+  const row = document.createElement('div'); row.className = 'comp-row';
+  row.innerHTML = `<span style="font-size:12px;color:var(--ink-4);font-family:'DM Mono',monospace;min-width:52px;flex-shrink:0;">Step ${n}</span><input type="text" class="cw-step-input" placeholder="e.g. User clicks the search icon…"><button class="btn-remove" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(row);
+}
+function addUTScenario() {
+  const list = document.getElementById('ut-scenarios-list');
+  if(!list || list.children.length >= 6) return;
+  const row = document.createElement('div'); row.className = 'comp-row';
+  row.innerHTML = `<input type="text" class="ut-scenario-input" placeholder="e.g. Find a product under $50 and add it to cart"><button class="btn-remove" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(row);
+}
+function addUITheme() {
+  const list = document.getElementById('ui-themes-list');
+  if(!list || list.children.length >= 8) return;
+  const row = document.createElement('div'); row.className = 'comp-row';
+  row.innerHTML = `<input type="text" class="ui-theme-input" placeholder="e.g. Navigation confusion, Feature discovery…"><button class="btn-remove" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(row);
+}
 
 function buildChips(items, containerId, selSet) {
   const el = document.getElementById(containerId);
@@ -326,15 +499,16 @@ function buildChips(items, containerId, selSet) {
     </div>`).join('');
 }
 function toggleChip(i, cid, el) {
-  const map = {'h-chips':selH,'a11y-chips':selA,'dim-chips':selD};
+  const map = {'h-chips':selH,'a11y-chips':selA,'dim-chips':selD,'assist-chips':selAssist,'eval-chips':selEvalDims,'metric-chips':selMetrics,'stage-chips':selStages};
   const s = map[cid]; if(!s) return;
   s.has(i) ? s.delete(i) : s.add(i);
   el.classList.toggle('on');
 }
 
 function goStep(n) {
-  for(let i=1;i<=5;i++) {
-    document.getElementById('p'+i).classList.toggle('active', i===n);
+  for(let i=1;i<=3;i++) {
+    const p = document.getElementById('p'+i);
+    if(p) p.classList.toggle('active', i===n);
     const ss = document.getElementById('ss'+i);
     if(ss) {
       ss.classList.remove('active','done');
@@ -438,14 +612,68 @@ function sevPillStyle(sev) {
   return `background:${bg};color:${c};`;
 }
 
-async function runAudit() {
-  const selHList = HEURISTICS.filter((_,i)=>selH.has(i));
-  const selAList = A11Y.filter((_,i)=>selA.has(i));
-  const selDList = DIMS.filter((_,i)=>selD.has(i));
-  const compList = comps.filter(c=>c.name.trim());
-  if(!selHList.length) { alert('Select at least one heuristic.'); return; }
+function buildMethodologyPrompt(desc, ptype, users, focus, biz) {
+  const base = `PRODUCT: ${ptype}\nDESCRIPTION: ${desc||'not provided'}\nTARGET USERS: ${users||'general users'}\nFOCUS: ${focus||'overall UX quality'}\nBUSINESS CONTEXT: ${biz||'not provided'}`;
+  let methodCtx = '';
 
-  // Check credits first
+  if(METHODOLOGY === 'heuristic-evaluation') {
+    const hl = HEURISTICS.filter((_,i)=>selH.has(i));
+    methodCtx = `METHODOLOGY: Nielsen's Heuristic Evaluation\nHEURISTICS: ${hl.map(h=>h.name).join(', ')}\nSCOPE: ${document.getElementById('eval-scope')?.value||'Full product'}\nUSER TASK: ${document.getElementById('user-task')?.value||'General use'}\nKNOWN CONCERNS: ${document.getElementById('known-concerns')?.value||'None'}`;
+  } else if(METHODOLOGY === 'accessibility-review') {
+    const wcag = document.querySelector('input[name="wcag-level"]:checked')?.value||'AA';
+    const al = A11Y.filter((_,i)=>selA.has(i));
+    methodCtx = `METHODOLOGY: Accessibility Audit (WCAG ${wcag})\nWCAG PRINCIPLES: ${al.map(a=>a.name).join(', ')}\nKNOWN ISSUES: ${document.getElementById('known-a11y')?.value||'None'}\nFocus heavily on accessibility. Make a11y_score the primary metric.`;
+  } else if(METHODOLOGY === 'cognitive-walkthrough') {
+    const steps = [...document.querySelectorAll('.cw-step-input')].map(i=>i.value).filter(Boolean);
+    methodCtx = `METHODOLOGY: Cognitive Walkthrough\nUSER PERSONA: ${document.getElementById('cw-persona')?.value||'Not specified'}\nEXPERIENCE: ${document.getElementById('cw-exp')?.value||'Intermediate'}\nGOAL: ${document.getElementById('cw-goal')?.value||'Not specified'}\nTASK STEPS: ${steps.map((s,i)=>`${i+1}. ${s}`).join('; ')||'Not specified'}\nEvaluate from the user's perspective trying to achieve their goal.`;
+  } else if(METHODOLOGY === 'expert-review') {
+    const dims = [...document.querySelectorAll('#eval-chips .chip.on')].map(e=>e.querySelector('.chip-name')?.textContent||'').filter(Boolean);
+    methodCtx = `METHODOLOGY: Expert Review\nDIMENSIONS: ${dims.join(', ')||'All dimensions'}\nBENCHMARK: ${document.getElementById('er-benchmark')?.value||'General best practices'}\nFOCUS: ${document.getElementById('er-focus')?.value||'Overall quality'}`;
+  } else if(METHODOLOGY === 'usability-testing') {
+    const scenarios = [...document.querySelectorAll('.ut-scenario-input')].map(i=>i.value).filter(Boolean);
+    methodCtx = `METHODOLOGY: Usability Testing Analysis\nCONTEXT: ${document.getElementById('ut-context')?.value||''}\nPARTICIPANTS: ${document.getElementById('ut-participants')?.value||'Not specified'}\nTASK SCENARIOS: ${scenarios.join('; ')||'Not specified'}`;
+  } else if(METHODOLOGY === 'user-interview') {
+    const themes = [...document.querySelectorAll('.ui-theme-input')].map(i=>i.value).filter(Boolean);
+    methodCtx = `METHODOLOGY: User Interview Analysis\nOBJECTIVE: ${document.getElementById('ui-objective')?.value||'Not specified'}\nTHEMES: ${themes.join(', ')||'Not specified'}\nFINDINGS: ${document.getElementById('ui-findings')?.value||'Not specified'}`;
+  } else if(METHODOLOGY === 'journey-map' || METHODOLOGY === 'journey-review') {
+    methodCtx = `METHODOLOGY: User Journey Map Review\nPERSONA: ${document.getElementById('jm-persona')?.value||'Not specified'}\nGOAL: ${document.getElementById('jm-goal')?.value||'Not specified'}\nTOUCHPOINTS: ${document.getElementById('jm-touchpoints')?.value||'Not specified'}\nPAIN POINTS: ${document.getElementById('jm-painpoints')?.value||'Not specified'}`;
+  } else {
+    const hl = HEURISTICS.filter((_,i)=>selH.has(i));
+    const al = A11Y.filter((_,i)=>selA.has(i));
+    const dl = DIMS.filter((_,i)=>selD.has(i));
+    const cl = comps.filter(c=>c.name?.trim());
+    methodCtx = `METHODOLOGY: Full UX Audit\nHEURISTICS: ${hl.map(h=>h.name).join(', ')}\nACCESSIBILITY: ${al.map(a=>a.name).join(', ')}\nCOMPETITORS: ${cl.map(c=>c.name).join(', ')||'none'}\nDIMENSIONS: ${dl.join(', ')}`;
+  }
+
+  return `You are a senior UX researcher. Conduct a professional ${METHOD_META[METHODOLOGY]?.label||'UX'} evaluation.
+
+${base}
+
+${methodCtx}
+
+Return ONLY valid JSON, no markdown, no explanation. Be concise:
+{
+  "overall_score": <0-100>,
+  "severity_label": "<Critical|Major|Moderate|Minor|Good>",
+  "summary": "<2-sentence summary>",
+  "heuristics": [
+    {"id":"H1","name":"...","score":<0-10>,"severity":<0-4>,"finding":"<one sentence>","issues":["<issue>"],"recommendations":["<rec>"],"positives":["<positive>"]}
+  ],
+  "accessibility": [
+    {"category":"<name>","wcag_ref":"<WCAG ref>","status":"<pass|warn|fail>","finding":"<brief>"}
+  ],
+  "a11y_score": <0-100>,
+  "benchmark": {
+    "products": [],
+    "insights": ["<insight>"],
+    "recommendation": "<one sentence>"
+  },
+  "top_priorities": ["<p1>","<p2>","<p3>"],
+  "quick_wins": ["<w1>","<w2>"]
+}`;
+}
+
+async function runAudit() {
   if (getCredits() <= 0) {
     document.getElementById('paywall').classList.add('show');
     document.getElementById('audit-main-layout').style.display = 'none';
@@ -454,11 +682,11 @@ async function runAudit() {
   document.getElementById('run-btn').disabled = true;
   setStatus('Preparing analysis…', true);
 
-  const desc = document.getElementById('desc').value.trim();
-  const focus = document.getElementById('focus').value.trim();
-  const biz = document.getElementById('biz').value.trim();
-  const ptype = document.getElementById('ptype').value || 'web application';
-  const users = document.getElementById('users').value.trim();
+  const desc = document.getElementById('desc')?.value?.trim() || '';
+  const focus = document.getElementById('focus')?.value?.trim() || '';
+  const biz = document.getElementById('biz')?.value?.trim() || '';
+  const ptype = document.getElementById('ptype')?.value || 'web application';
+  const users = document.getElementById('users')?.value?.trim() || '';
 
   imgDataURLs = [];
   let blocks = [];
@@ -468,77 +696,14 @@ async function runAudit() {
     blocks.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}});
   }
 
-  const prompt = `You are a senior UX researcher. Conduct a comprehensive professional evaluation.
-
-PRODUCT: ${ptype}
-DESCRIPTION: ${desc||'not provided'}
-TARGET USERS: ${users||'general users'}
-FOCUS: ${focus||'overall UX quality'}
-BUSINESS CONTEXT: ${biz||'not provided'}
-
-HEURISTICS TO EVALUATE:
-${selHList.map(h=>`${h.id}: ${h.name}`).join('\n')}
-
-ACCESSIBILITY AREAS:
-${selAList.map(a=>a.name).join(', ')}
-
-COMPETITORS FOR BENCHMARKING: ${compList.map(c=>c.name+(c.url?` (${c.url})`:'')).join(', ')||'none specified'}
-BENCHMARK DIMENSIONS: ${selDList.join(', ')}
-
-Return ONLY valid JSON, no markdown, no explanation. Be concise — short strings only:
-{
-  "overall_score": <0-100>,
-  "severity_label": "<Critical|Major|Moderate|Minor|Good>",
-  "summary": "<2-sentence summary>",
-  "heuristics": [
-    {
-      "id": "H1",
-      "name": "...",
-      "score": <0-10>,
-      "severity": <0-4>,
-      "finding": "<one-sentence finding>",
-      "issues": ["<issue 1>","<issue 2>"],
-      "recommendations": ["<rec 1>","<rec 2>"],
-      "positives": ["<positive 1>"]
-    }
-  ],
-  "accessibility": [
-    {
-      "category": "<name>",
-      "wcag_ref": "<e.g. WCAG 1.4.3>",
-      "status": "<pass|warn|fail>",
-      "finding": "<brief finding>"
-    }
-  ],
-  "a11y_score": <0-100>,
-  "benchmark": {
-    "products": [
-      {
-        "name": "<product>",
-        "scores": { "<dim>": <0-10> },
-        "strengths": ["<s1>"],
-        "weaknesses": ["<w1>"]
-      }
-    ],
-    "insights": ["<insight 1>","<insight 2>"],
-    "recommendation": "<one sentence>"
-  },
-  "top_priorities": ["<p1>","<p2>","<p3>"],
-  "quick_wins": ["<w1>","<w2>"]
-}`;
-
+  const prompt = buildMethodologyPrompt(desc, ptype, users, focus, biz);
   blocks.push({type:'text',text:prompt});
-  setStatus('Running AI analysis — heuristics, accessibility, benchmarking…', true);
+  setStatus(`Running ${METHOD_META[METHODOLOGY]?.label||'UX'} analysis…`, true);
 
   try {
     const res = await fetch('/api/analyze', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:4000,
-        messages:[{role:'user',content:blocks}]
-      })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,messages:[{role:'user',content:blocks}]})
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message || data.error);
@@ -546,11 +711,13 @@ Return ONLY valid JSON, no markdown, no explanation. Be concise — short string
     const raw = data.content.map(b=>b.text||'').join('');
     const result = JSON.parse(raw.replace(/```json|```/g,'').trim());
     setStatus('Analysis complete.', false);
-    document.getElementById('ss5').style.display = '';
+    document.getElementById('ss3').style.display = '';
     useCredit();
     saveStudyToHistory(result);
-    renderResults(result, selDList, compList);
-    goStep(5);
+    const dims = DIMS.filter((_,i)=>selD.has(i));
+    const compList = comps.filter(c=>c.name?.trim());
+    renderResults(result, dims, compList);
+    goStep(3);
   } catch(err) {
     setStatus('Error: ' + (err.message||'Analysis failed. Please try again.'), false);
     document.getElementById('run-btn').disabled = false;
@@ -1072,15 +1239,12 @@ function updateCreditBar() {
 // Check credits on page load
 document.addEventListener('DOMContentLoaded', updateCreditBar);
 
-// ── Override runAudit to use credit ────────────────────────
-const _origRunAudit = runAudit;
-// runAudit is defined below; we patch it after definition
-
+// credit check is now inline in runAudit()
 // Init
-buildChips(HEURISTICS, 'h-chips', selH);
-buildChips(A11Y, 'a11y-chips', selA);
-buildChips(DIMS.map(d=>({name:d})), 'dim-chips', selD);
-addComp(); addComp();
+document.addEventListener('DOMContentLoaded', () => {
+  updateCreditBar();
+  buildMethodologyForm();
+});
 </script>
 </body>
 </html>
